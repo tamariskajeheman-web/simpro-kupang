@@ -103,7 +103,7 @@
 <body>
     <!-- BANNER OFFLINE -->
     <div id="offline-banner" class="fixed top-0 left-0 w-full bg-amber-500 text-white text-center py-1.5 text-[10px] font-black z-[200] tracking-widest hidden shadow-md">
-        <i class="fas fa-database mr-1"></i> MODE SIMULASI LOKAL - AKTIF (Sesi Aman Saat Minimize)
+        <i class="fas fa-database mr-1"></i> MODE SIMULASI LOKAL - AKTIF (Data Sesi Aman Saat Minimize)
     </div>
 
     <div class="animated-bg"></div>
@@ -113,6 +113,7 @@
          ========================================= -->
     <div id="login-screen" class="fixed inset-0 flex-col items-center justify-center z-[100] px-6 backdrop-blur-md overflow-y-auto py-6 bg-slate-50/50 flex">
         <div class="glass-panel p-8 w-full max-w-md text-center fade-in relative my-auto overflow-hidden">
+            <!-- Ikon Sapi Latar Belakang -->
             <i class="fas fa-cow absolute -right-10 -bottom-10 text-emerald-500 opacity-5" style="font-size: 15rem; z-index: 0;"></i>
             
             <div class="relative w-28 h-28 mx-auto mb-5 rounded-full bg-slate-900 flex items-center justify-center floating shadow-xl overflow-hidden border-2 border-emerald-500/50 z-10">
@@ -358,7 +359,7 @@
                     <div id="pengingat-list" class="space-y-3"></div>
                 </div>
 
-                <!-- KARTU STATISTIK (PROPORSIONAL) -->
+                <!-- KARTU STATISTIK -->
                 <div class="grid grid-cols-2 gap-3 mb-6">
                     <div class="glass-card p-4 text-center border-t-4 border-sky-500 cursor-pointer shadow-sm relative overflow-hidden" onclick="switchView('data'); setLayananFilter('IB');">
                         <i class="fas fa-syringe absolute -right-2 -bottom-2 text-sky-500 opacity-10" style="font-size: 3.5rem;"></i>
@@ -539,7 +540,7 @@
                 </div>
             </section>
 
-            <!-- DATA / FILTER (DIKEMBALIKAN UTUH RAPI 100%) -->
+            <!-- DATA / FILTER (DIKEMBALIKAN UTUH & RAPI 100%) -->
             <section id="view-data" class="view-section hidden fade-in pb-4">
                 <div class="flex justify-between items-end mb-4">
                     <div><h2 class="text-3xl font-black text-gradient font-outfit">Sistem Data</h2></div>
@@ -560,7 +561,7 @@
                     </button>
                 </div>
 
-                <!-- FILTER DATA (100% LENGKAP & RAPI) -->
+                <!-- FILTER DATA LENGKAP -->
                 <div class="glass-card p-4 mb-4 border-t-4 border-emerald-500 shadow-sm">
                     <div class="flex justify-between items-center mb-3">
                         <label class="text-[10px] font-black text-slate-700 uppercase tracking-widest"><i class="fas fa-filter mr-2"></i>Pencarian & Filter</label>
@@ -618,7 +619,7 @@
 
                     <div class="grid grid-cols-1 gap-3">
                         <div class="input-float">
-                            <label>DESA / KELURAHAN (BONUS)</label>
+                            <label>DESA / KELURAHAN</label>
                             <select id="filter-desa" class="text-xs" onchange="renderDataList()">
                                 <option value="Semua">Semua Desa</option>
                             </select>
@@ -672,7 +673,6 @@
                     <div id="admin-tools" class="hidden mt-2 pt-2 border-t border-emerald-100 relative z-10 space-y-2">
                         <button type="button" onclick="switchView('users')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-bold px-4 py-4 rounded-xl tracking-widest font-outfit shadow-md transition active:scale-95"><i class="fas fa-users-gear mr-2"></i> KELOLA PENGGUNA (ADMIN)</button>
                         
-                        <!-- TOMBOL UPLOAD FOTO SLIDER (KHUSUS ADMIN) -->
                         <div class="grid grid-cols-1 gap-2 mt-2">
                             <button type="button" onclick="document.getElementById('upload-banner-file').click()" class="w-full bg-sky-600 hover:bg-sky-700 text-white text-[9px] font-bold px-3 py-3 rounded-xl tracking-widest shadow-md transition active:scale-95">
                                 <i class="fas fa-images mr-1"></i> UPLOAD FOTO BANNER DASHBOARD
@@ -732,7 +732,7 @@
         <i id="toast-icon" class="fas fa-check-circle text-emerald-500 mr-3 text-xl"></i> <span id="toast-msg">Notifikasi</span>
     </div>
 
-    <!-- SCRIPT JS LENGKAP - 100% BERSIH DAN RAPI (UNMINIFIED) -->
+    <!-- SCRIPT JAVASCRIPT MASTER FINAL -->
     <script>
     const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbwPHHSCwWpmTHya7r7xmFMjYhLvnuY0_8K6FqL9tqIrbpGOj78o0lMtdarWpixre_oJ4g/exec";
     const IS_OFFLINE = GOOGLE_SHEETS_URL.includes("ISI_DENGAN_URL");
@@ -741,7 +741,6 @@
         document.getElementById('offline-banner').classList.remove('hidden'); 
     }
 
-    // VARIABEL GLOBAL
     let reports = [], usersList = [], inboxList = [], bannerImages = [], currentUser = null; 
     let activeLayananFilter = 'Semua'; let isEditingProfile = false; let layananChartObj = null; 
     let bannerInterval = null; let currentBannerIndex = 0; let html5QrcodeScanner = null; let map = null;
@@ -752,7 +751,7 @@
         return p; 
     }
 
-    // KONTROL SUARA J.A.R.V.I.S
+    // --- KONTROL SUARA J.A.R.V.I.S ---
     function playJarvisVoice(text) {
         if (!('speechSynthesis' in window)) return;
         let s = JSON.parse(localStorage.getItem('simpro_settings') || '{"batterySaver":false}');
@@ -817,7 +816,7 @@
         else { showToast("Perintah tidak dimengerti.", true); }
     }
 
-    // MANAJEMEN MODAL & HALAMAN
+    // --- MANAJEMEN MODAL & HALAMAN ---
     function showRegister() { 
         document.getElementById('login-screen').classList.add('hidden'); document.getElementById('login-screen').classList.remove('flex'); 
         document.getElementById('register-screen').classList.remove('hidden'); document.getElementById('register-screen').classList.add('flex'); 
@@ -861,7 +860,7 @@
     function closeMapModal() { document.getElementById('peta-modal').classList.add('hidden'); document.getElementById('peta-modal').classList.remove('flex'); }
     function closeDetailModal() { document.getElementById('detail-modal').classList.add('hidden'); document.getElementById('detail-modal').classList.remove('flex'); }
 
-    // SETTINGS (TEMA & ANIMASI)
+    // --- SETTINGS (TEMA & ANIMASI) ---
     function initSettings() { 
         let saved = localStorage.getItem('simpro_settings'); 
         if (saved) { let s = JSON.parse(saved); document.getElementById('toggle-dark').checked = s.darkMode; document.getElementById('toggle-anim').checked = s.batterySaver; } 
@@ -877,7 +876,7 @@
         if (s.batterySaver) document.body.classList.add('no-anim'); else document.body.classList.remove('no-anim'); 
     }
 
-    // DATA REFERENSI KABUPATEN KUPANG (LENGKAP 24 KECAMATAN)
+    // --- DATA REFERENSI KABUPATEN KUPANG (LENGKAP) ---
     const dataWilayahKupang = {
         "Amabi Oefeto": ["Fatukanutu", "Kairane", "Makatak", "Niunbaun", "Oeniko", "Oenuntono", "Raknamo"],
         "Amabi Oefeto Timur": ["Enolanan", "Muke", "Nunmafo", "Oemasi", "Oemolo", "Oenunut", "Pathau", "Sekik"],
@@ -909,17 +908,17 @@
     const listBabi = ['Babi Landrace', 'Babi Duroc', 'Babi Yorkshire', 'Babi VDL', 'Babi Lokal', 'Lainnya'];
     const avatarSeeds = ['Felix', 'Aneka', 'Scooter', 'Mimi', 'Bella'];
 
-    // INISIALISASI WILAYAH
+    // --- INISIALISASI WILAYAH ---
     function initWilayah() { 
         const inputKec = document.getElementById('input-kecamatan'); 
         const filterKec = document.getElementById('filter-kecamatan'); 
         
-        if(inputKec) inputKec.innerHTML = ''; 
-        if(filterKec) filterKec.innerHTML = '<option value="Semua">Semua Kecamatan</option>'; 
+        if (inputKec) inputKec.innerHTML = ''; 
+        if (filterKec) filterKec.innerHTML = '<option value="Semua">Semua Kecamatan</option>'; 
         
         Object.keys(dataWilayahKupang).sort().forEach(kec => { 
-            if(inputKec) inputKec.innerHTML += `<option value="${kec}">${kec}</option>`; 
-            if(filterKec) filterKec.innerHTML += `<option value="${kec}">${kec}</option>`; 
+            if (inputKec) inputKec.innerHTML += `<option value="${kec}">${kec}</option>`; 
+            if (filterKec) filterKec.innerHTML += `<option value="${kec}">${kec}</option>`; 
         }); 
         
         updateDesaSelect('input-kecamatan', 'input-lokasi'); 
@@ -929,22 +928,23 @@
     function updateDesaSelect(idKec, idDesa) { 
         const kec = document.getElementById(idKec).value; 
         const selDesa = document.getElementById(idDesa); 
-        if(!selDesa) return;
+        if (!selDesa) return;
+        
         selDesa.innerHTML = ''; 
-        if(dataWilayahKupang[kec]) { 
+        if (dataWilayahKupang[kec]) { 
             dataWilayahKupang[kec].sort().forEach(desa => { 
                 selDesa.innerHTML += `<option value="${desa}">${desa}</option>`; 
             }); 
         } 
     }
 
-    // BONUS PERBAIKAN: Fungsi Update Filter Desa
     function updateDesaFilter() {
         const kec = document.getElementById('filter-kecamatan').value;
         const selDesa = document.getElementById('filter-desa');
-        if(!selDesa) return;
+        if (!selDesa) return;
+        
         selDesa.innerHTML = '<option value="Semua">Semua Desa</option>';
-        if(kec !== 'Semua' && dataWilayahKupang[kec]) {
+        if (kec !== 'Semua' && dataWilayahKupang[kec]) {
             dataWilayahKupang[kec].sort().forEach(desa => {
                 selDesa.innerHTML += `<option value="${desa}">${desa}</option>`;
             });
@@ -952,7 +952,7 @@
         renderDataList();
     }
 
-    // DATABASE LOKAL & MASTER ADMIN
+    // --- DATABASE LOKAL & MASTER ADMIN ---
     function loadOfflineDB() {
         let db = localStorage.getItem('simpro_db');
         if (db) { 
@@ -979,18 +979,30 @@
     function backupDatabase() { const db = localStorage.getItem('simpro_db'); if(!db) return showToast("Database kosong!", true); const blob = new Blob([db], {type: "application/json"}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `Backup_SIMPRO_DB_${new Date().toISOString().slice(0,10)}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); showToast("Database diunduh!"); }
     function restoreDatabase(event) { const file = event.target.files[0]; if(!file) return; const reader = new FileReader(); reader.onload = function(e) { try { const content = e.target.result; JSON.parse(content); localStorage.setItem('simpro_db', content); showToast("Database dipulihkan!"); setTimeout(() => location.reload(), 1500); } catch(err) { showToast("File tidak valid!", true); } }; reader.readAsText(file); }
 
-    // UPLOAD FOTO BANNER DASHBOARD
+    // --- UPLOAD FOTO BANNER DASHBOARD ---
     function handleBannerUpload(event) {
         const files = event.target.files; if(!files || files.length === 0) return; showToast("Mengunggah foto...");
         Array.from(files).forEach(file => { 
-            compressImageToBase64(file, 800, function(dataUrl) { 
-                bannerImages.push(dataUrl); saveOfflineDB(); renderBanners(); 
+            compressImageToBase64(file, 800, async function(dataUrl) { 
+                if(IS_OFFLINE) {
+                    bannerImages.push(dataUrl); saveOfflineDB(); renderBanners(); showToast("Foto slide lokal ditambahkan!");
+                } else {
+                    const payload = createPayload({action: 'uploadBanner', image: dataUrl});
+                    try { await fetch(GOOGLE_SHEETS_URL, {method: 'POST', body: payload}); bannerImages.push(dataUrl); saveOfflineDB(); renderBanners(); showToast("Foto slide Online sukses!"); } catch(err) { showToast("Gagal upload ke server", true); }
+                }
             }); 
         });
-        showToast("Foto banner ditambahkan!");
     }
     
-    function clearBanners() { if(confirm("Hapus semua foto banner?")) { bannerImages = []; saveOfflineDB(); renderBanners(); showToast("Banner dikosongkan."); } }
+    async function clearBanners() { 
+        if(confirm("Hapus semua foto banner untuk SEMUA PENGGUNA?")) { 
+            if(!IS_OFFLINE) {
+                const payload = createPayload({action: 'deleteBanners'});
+                try { await fetch(GOOGLE_SHEETS_URL, {method: 'POST', body: payload}); } catch(e){}
+            }
+            bannerImages = []; saveOfflineDB(); renderBanners(); showToast("Banner dikosongkan."); 
+        } 
+    }
     
     function renderBanners() {
         const container = document.getElementById('banner-slider'); const delBtn = document.getElementById('btn-delete-banner'); if(!container) return;
@@ -1020,7 +1032,7 @@
         }
     }
 
-    // SINKRONISASI OFFLINE
+    // --- SINKRONISASI OFFLINE ---
     function updateInboxBadge() { const badge = document.getElementById('inbox-badge'); if(!badge) return; let pending = inboxList.filter(x => x.status === 'Belum Diproses').length; if(pending > 0) { badge.innerText = pending; badge.classList.remove('hidden'); badge.classList.add('flex'); } else { badge.classList.add('hidden'); badge.classList.remove('flex'); } }
     function updateSyncBadge() { const badge = document.getElementById('sync-badge'); if(!badge) return; let pending = reports.filter(x => x.syncStatus === 'pending').length; if(pending > 0) { badge.innerText = pending; badge.classList.remove('hidden'); badge.classList.add('flex'); } else { badge.classList.add('hidden'); badge.classList.remove('flex'); } }
     
@@ -1047,30 +1059,23 @@
         updateBangsaList('input-pejantan', listSapi); updateBangsaInduk(); generateAvatarSelectors(); initWilayah(); fetchCloudData();
     }
 
-    // LOGIN & CLOUD FETCH (DIKEMBALIKAN UTUH AGAR TIDAK ERROR 4)
+    // --- LOGIN & CLOUD FETCH ---
     async function handleLogin(e) {
         e.preventDefault(); 
-        const u = document.getElementById('login-username').value.trim(); 
-        const p = document.getElementById('login-password').value.trim(); 
-        const btn = document.getElementById('btn-login'); 
-        btn.innerText = "MEMERIKSA DATABASE..."; btn.disabled = true;
+        const u = document.getElementById('login-username').value.trim(); const p = document.getElementById('login-password').value.trim(); 
+        const btn = document.getElementById('btn-login'); btn.innerText = "MEMERIKSA DATABASE..."; btn.disabled = true;
 
         if (IS_OFFLINE) {
             setTimeout(() => {
                 let foundUser = usersList.find(user => user.username.toLowerCase() === u.toLowerCase());
-                if (!foundUser || foundUser.password !== p) { 
-                    showToast('Username atau Kata Sandi salah!', true); 
-                    btn.innerHTML = 'MASUK SISTEM <i class="fas fa-arrow-right ml-2 text-xs"></i>'; btn.disabled = false; return; 
-                }
+                if (!foundUser || foundUser.password !== p) { showToast('Username atau Kata Sandi salah!', true); btn.innerHTML = 'MASUK SISTEM <i class="fas fa-arrow-right ml-2 text-xs"></i>'; btn.disabled = false; return; }
                 currentUser = { ...foundUser }; if(!currentUser.avatar) currentUser.avatar = 'Felix'; 
                 sessionStorage.setItem('simpro_pro_session', JSON.stringify(currentUser)); 
                 startAppFlow(); showToast('Akses Diberikan!'); playJarvisVoice("Akses diterima. Selamat bertugas, " + currentUser.name.split(' ')[0]); 
                 btn.innerHTML = 'MASUK SISTEM <i class="fas fa-arrow-right ml-2 text-xs"></i>'; btn.disabled = false;
-            }, 800); 
-            return;
+            }, 800); return;
         }
 
-        // FUNGSI ONLINE LOGIN
         const payload = createPayload({ action: 'login', username: u, password: p });
         try {
             let response = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, redirect: "follow" });
@@ -1078,12 +1083,8 @@
             if(json.result === 'success') { 
                 currentUser = json.user; sessionStorage.setItem('simpro_pro_session', JSON.stringify(currentUser)); 
                 startAppFlow(); showToast('Akses Diberikan!'); playJarvisVoice("Akses diterima."); 
-            } else { 
-                showToast(json.message || 'Salah!', true); 
-            }
-        } catch(err) { 
-            showToast('Gagal terhubung Server.', true); 
-        }
+            } else { showToast(json.message || 'Salah!', true); }
+        } catch(err) { showToast('Gagal terhubung Server.', true); }
         btn.innerHTML = 'MASUK SISTEM <i class="fas fa-arrow-right ml-2 text-xs"></i>'; btn.disabled = false;
     }
 
@@ -1095,12 +1096,14 @@
             let json = await res.json(); 
             if(json && json.result === 'success') { 
                 reports = json.reports || []; usersList = json.users || []; inboxList = json.inbox || []; 
+                if(json.banners) { bannerImages = json.banners.map(b => b.image_data).filter(Boolean); }
+                saveOfflineDB();
                 if (currentUser) { updateDashboard(); if(currentUser.role === 'admin') { renderUserManagement(); renderInbox(); updateInboxBadge(); } } 
             } 
         } catch(e) { console.log("Gagal", e); }
     }
 
-    // PENGINGAT PETUGAS
+    // --- PENGINGAT PETUGAS ---
     function renderPengingat() {
         const c = document.getElementById('pengingat-list'); const pCont = document.getElementById('pengingat-container'); if(!c || !pCont) return;
         let myReps = reports.filter(r => r.Username === currentUser.username || r.Petugas === currentUser.name); let pending = [];
@@ -1127,6 +1130,7 @@
         layananChartObj = new Chart(ctx, { type: 'doughnut', data: { labels: ['Inseminasi (IB)', 'Kebuntingan (PKb)', 'Kelahiran'], datasets: [{ data: [ib, pkb, lahir], backgroundColor: ['#0284c7', '#10b981', '#ec4899'], borderWidth: 2, borderColor: document.body.classList.contains('dark-mode') ? '#1e293b' : '#ffffff' }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: textColor, font: { family: 'Outfit', size: 10, weight: 'bold' } } } }, cutout: '65%' } }); 
     }
 
+    // --- SCANNER & MAPS ---
     function onScanSuccess(decodedText, decodedResult) { document.getElementById('input-eartag-form').value = decodedText; showToast('Eartag dipindai!'); closeScannerModal(); }
     function onScanFailure(error) {}
 
@@ -1139,7 +1143,7 @@
         });
     }
 
-    // HTMX PREPARE DATA
+    // --- HTMX (LAPORAN) ---
     function prepareHtmxData(evt) {
         document.getElementById('htmx-id-sistem').value = 'SIMPRO-' + Date.now().toString().slice(-5); document.getElementById('htmx-waktu').value = new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'}); document.getElementById('htmx-petugas-name').value = currentUser.name; document.getElementById('htmx-petugas-user').value = currentUser.username;
         if (IS_OFFLINE) {
@@ -1163,6 +1167,7 @@
         } catch(error) { console.error("Gagal menu", error); }
     }
 
+    // --- PROFIL & AVATAR ---
     function loadProfileData() { if(!currentUser) return; document.getElementById('edit-name').value = currentUser.name || ''; document.getElementById('edit-username').value = currentUser.username || ''; document.getElementById('edit-email').value = currentUser.email || ''; document.getElementById('edit-wa').value = currentUser.whatsapp || ''; document.getElementById('edit-password').value = ''; updateAvatarDisplay(currentUser.avatar || 'Felix', 'edit-avatar-preview', 'edit-avatar-fallback'); isEditingProfile = false; toggleEditProfileUI(); }
     function toggleEditProfile() { isEditingProfile = !isEditingProfile; toggleEditProfileUI(); }
     
@@ -1176,119 +1181,17 @@
         e.preventDefault(); const btn = document.getElementById('btn-save-profile'); btn.innerText = "MENYIMPAN..."; btn.disabled = true;
         const newName = document.getElementById('edit-name').value.trim(); const newEmail = document.getElementById('edit-email').value.trim(); const newWA = document.getElementById('edit-wa').value.trim(); const newPass = document.getElementById('edit-password').value.trim(); const newAvatar = currentUser._tempAvatar || currentUser.avatar;
         
-        if (IS_OFFLINE) { setTimeout(() => { showToast("Profil diperbarui!"); currentUser.name = newName; currentUser.email = newEmail; currentUser.whatsapp = newWA; currentUser.avatar = newAvatar; if(newPass) currentUser.password = newPass; delete currentUser._tempAvatar; sessionStorage.setItem('simpro_pro_session', JSON.stringify(currentUser)); let idx = usersList.findIndex(u => u.username.toLowerCase() === currentUser.username.toLowerCase()); if(idx > -1) { usersList[idx].name = newName; usersList[idx].email = newEmail; usersList[idx].whatsapp = newWA; usersList[idx].avatar = newAvatar; if(newPass) usersList[idx].password = newPass; } saveOfflineDB(); document.getElementById('dash-name').innerText = currentUser.name; updateAvatarDisplay(currentUser.avatar, 'header-avatar', 'header-avatar-fallback'); isEditingProfile = false; toggleEditProfileUI(); loadProfileData(); btn.innerHTML = '<i class="fas fa-save mr-1"></i> SIMPAN PERBAIKAN'; btn.disabled = false; }, 800); return; }
+        if (IS_OFFLINE) { 
+            setTimeout(() => { showToast("Profil diperbarui!"); currentUser.name = newName; currentUser.email = newEmail; currentUser.whatsapp = newWA; currentUser.avatar = newAvatar; if(newPass) currentUser.password = newPass; delete currentUser._tempAvatar; sessionStorage.setItem('simpro_pro_session', JSON.stringify(currentUser)); let idx = usersList.findIndex(u => u.username.toLowerCase() === currentUser.username.toLowerCase()); if(idx > -1) { usersList[idx].name = newName; usersList[idx].email = newEmail; usersList[idx].whatsapp = newWA; usersList[idx].avatar = newAvatar; if(newPass) usersList[idx].password = newPass; } saveOfflineDB(); document.getElementById('dash-name').innerText = currentUser.name; updateAvatarDisplay(currentUser.avatar, 'header-avatar', 'header-avatar-fallback'); isEditingProfile = false; toggleEditProfileUI(); loadProfileData(); btn.innerHTML = '<i class="fas fa-save mr-1"></i> SIMPAN PERBAIKAN'; btn.disabled = false; }, 800); return; 
+        }
 
         const payload = createPayload({ action: 'updateProfile', username: currentUser.username, name: newName, email: newEmail, whatsapp: newWA, password: newPass, avatar: newAvatar });
-        try { let res = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, redirect: "follow" }); let json = await res.json(); if(json.result === 'success') { showToast("Profil diperbarui!"); currentUser.name = newName; currentUser.email = newEmail; currentUser.whatsapp = newWA; currentUser.avatar = newAvatar; if(newPass) currentUser.password = newPass; delete currentUser._tempAvatar; sessionStorage.setItem('simpro_pro_session', JSON.stringify(currentUser)); document.getElementById('dash-name').innerText = currentUser.name; updateAvatarDisplay(currentUser.avatar, 'header-avatar', 'header-avatar-fallback'); isEditingProfile = false; toggleEditProfileUI(); loadProfileData(); fetchCloudData(); } else { showToast(json.message || "Gagal", true); } } catch(err) { showToast("Gagal terhubung", true); } finally { btn.innerHTML = '<i class="fas fa-save mr-1"></i> SIMPAN PERBAIKAN'; btn.disabled = false; }
-    }
-
-    function renderUserManagement() {
-        const c = document.getElementById('users-container'); if(!c) return; c.innerHTML = '';
-        if(usersList.length === 0) { c.innerHTML = '<p class="text-xs text-slate-500 text-center py-4">Belum ada akun petugas terdaftar.</p>'; return; }
-        usersList.forEach(u => {
-            let adminBtns = '';
-            if (currentUser && currentUser.role === 'admin') { let btnHapus = u.username !== currentUser.username ? `<button type="button" onclick="adminDeleteUser('${u.username}')" class="bg-rose-50 text-rose-600 hover:bg-rose-100 hover:text-rose-700 px-3 py-1.5 rounded-lg text-[9px] font-black transition shadow-sm active:scale-95"><i class="fas fa-trash mr-1"></i> HAPUS</button>` : ``; adminBtns = `<div class="mt-3 pt-2 border-t border-slate-100 flex justify-end gap-2"><button type="button" onclick="adminEditUser('${u.username}')" class="bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-700 px-3 py-1.5 rounded-lg text-[9px] font-black transition shadow-sm active:scale-95"><i class="fas fa-pencil-alt mr-1"></i> EDIT</button>${btnHapus}</div>`; }
-            c.innerHTML += `<div class="glass-card p-4 shadow-sm mb-3"><div class="flex justify-between items-start"><div><p class="text-sm font-black text-slate-800">${u.name}</p><p class="text-[10px] text-sky-600 font-mono mt-0.5">@${u.username}</p><p class="text-[10px] text-slate-500 mt-1"><i class="fab fa-whatsapp text-emerald-500 mr-1"></i>${u.whatsapp || '-'} <br> <i class="far fa-envelope text-blue-400 mr-1 mt-1"></i>${u.email || '-'}</p></div><span class="text-[9px] ${u.role === 'admin' ? 'bg-indigo-100 text-indigo-700' : 'bg-emerald-100 text-emerald-700'} px-2.5 py-1 rounded-full font-black uppercase shadow-sm">${u.role}</span></div>${adminBtns}</div>`;
-        });
-    }
-
-    function adminEditUser(targetUsername) { let u = usersList.find(x => x.username === targetUsername); if(!u) return; document.getElementById('admin-edit-old-username').value = u.username; document.getElementById('admin-edit-name').value = u.name; document.getElementById('admin-edit-username').value = u.username; document.getElementById('admin-edit-role').value = u.role || 'petugas'; document.getElementById('admin-edit-email').value = u.email || ''; document.getElementById('admin-edit-wa').value = u.whatsapp || ''; document.getElementById('admin-edit-password').value = ''; document.getElementById('admin-edit-modal').classList.remove('hidden'); document.getElementById('admin-edit-modal').classList.add('flex'); }
-    function closeAdminEditModal() { document.getElementById('admin-edit-modal').classList.add('hidden'); document.getElementById('admin-edit-modal').classList.remove('flex'); }
-
-    async function submitAdminEditUser(e) {
-        e.preventDefault(); const oldUser = document.getElementById('admin-edit-old-username').value; const newName = document.getElementById('admin-edit-name').value; const newRole = document.getElementById('admin-edit-role').value; const newEmail = document.getElementById('admin-edit-email').value; const newWa = document.getElementById('admin-edit-wa').value; const newPass = document.getElementById('admin-edit-password').value;
-        if (IS_OFFLINE) { let idx = usersList.findIndex(x => x.username === oldUser); if(idx > -1) { usersList[idx].name = newName; usersList[idx].role = newRole; usersList[idx].email = newEmail; usersList[idx].whatsapp = newWa; if(newPass) usersList[idx].password = newPass; saveOfflineDB(); showToast(`Data diperbarui!`); renderUserManagement(); } closeAdminEditModal(); return; }
-        // Online
-        const payload = createPayload({ action: 'adminEditUser', oldUsername: oldUser, name: newName, role: newRole, email: newEmail, whatsapp: newWa, password: newPass });
-        try { let res = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, redirect: "follow" }); let json = await res.json(); if(json.result === 'success') { showToast(`User diperbarui.`); fetchCloudData(); closeAdminEditModal(); } else { showToast(json.message, true); } } catch(err) { showToast('Gagal terhubung', true); }
-    }
-
-    async function adminDeleteUser(targetUsername) { 
-        if(!confirm(`PERINGATAN: Yakin ingin menghapus permanen akun petugas @${targetUsername}?`)) return; 
-        if(IS_OFFLINE) { usersList = usersList.filter(u => u.username !== targetUsername); saveOfflineDB(); showToast(`Akun dihapus.`); renderUserManagement(); return; } 
-        // Online
-        const payload = createPayload({ action: 'deleteUser', targetUsername: targetUsername });
-        try { let res = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, redirect: "follow" }); let json = await res.json(); if(json.result === 'success') { showToast(`Akun dihapus.`); fetchCloudData(); } else { showToast(json.message, true); } } catch(err) { showToast('Gagal terhubung', true); }
-    }
-
-    function renderInbox() {
-        const badge = document.getElementById('inbox-badge'); const c = document.getElementById('inbox-container'); if(!c) return; c.innerHTML = '';
-        let pendingList = inboxList.filter(x => x.status === 'Belum Diproses'); if(pendingList.length > 0) { badge.innerText = pendingList.length; badge.classList.remove('hidden'); badge.classList.add('flex'); } else { badge.classList.add('hidden'); badge.classList.remove('flex'); }
-        if(inboxList.length === 0) { c.innerHTML = '<p class="text-xs text-slate-500 text-center py-4">Tidak ada pesan masuk.</p>'; return; }
-        inboxList.forEach(m => {
-            let actionBtn = m.status === 'Belum Diproses' ? `<div class="grid grid-cols-2 gap-2 mt-3"><button type="button" onclick="adminResetPasswordAndReply('${m.username}', '${m.wa}', '${m.email}')" class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-2 rounded-lg text-[9px] font-black shadow-sm transition"><i class="fas fa-key mr-1"></i> RESET SANDI</button><button type="button" onclick="adminResolveMessage('${m.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2 py-2 rounded-lg text-[9px] font-black shadow-sm transition"><i class="fas fa-check-double mr-1"></i> SELESAI</button></div>` : `<span class="bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-lg text-[9px] font-black w-full text-center block mt-2 shadow-sm"><i class="fas fa-check-circle mr-1"></i> DISELESAIKAN</span>`;
-            c.innerHTML += `<div class="glass-card p-4 shadow-sm mb-3 border-l-4 ${m.status === 'Belum Diproses' ? 'border-rose-500' : 'border-emerald-500'}"><p class="text-[10px] text-slate-400 mb-1">ID Keluhan: ${m.id} | ${m.date}</p><p class="text-sm font-black text-slate-800">@${m.username}</p><div class="my-2 bg-rose-50 p-3 rounded-xl border border-rose-100"><p class="text-xs text-slate-700 font-semibold italic">"${m.message}"</p></div><div class="grid grid-cols-2 gap-2 mt-2"><a href="https://wa.me/${m.wa.replace(/^0/, '62')}" target="_blank" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-600 text-center py-1.5 rounded text-[10px] font-bold transition"><i class="fab fa-whatsapp mr-1"></i> WA: ${m.wa}</a><a href="mailto:${m.email}" class="bg-blue-50 hover:bg-blue-100 text-blue-600 text-center py-1.5 rounded text-[10px] font-bold transition"><i class="far fa-envelope mr-1"></i> Email</a></div>${actionBtn}</div>`;
-        });
-    }
-
-    async function adminResolveMessage(idMsg) { 
-        if(IS_OFFLINE) { let msg = inboxList.find(x => x.id === idMsg); if(msg) msg.status = 'Telah Diselesaikan'; saveOfflineDB(); showToast(`Pesan diselesaikan.`); renderInbox(); updateInboxBadge(); return; } 
-        // Online
-        const payload = createPayload({ action: 'resolveMessage', idMsg: idMsg });
-        try { let res = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, redirect: "follow" }); let json = await res.json(); if(json.result === 'success') { showToast(`Diselesaikan.`); fetchCloudData(); } } catch(err) { showToast('Gagal terhubung', true); }
-    }
-
-    async function adminResetPasswordAndReply(targetUsername, waNumber, emailTarget) { 
-        const newPass = prompt(`Masukkan Kata Sandi Baru untuk pengguna @${targetUsername}:`); if(!newPass) return; 
-        if(IS_OFFLINE) { let u = usersList.find(x => x.username === targetUsername); if(u) u.password = newPass; saveOfflineDB(); showToast(`Sandi @${targetUsername} diubah!`); return; } 
-        // Online
-        const payload = createPayload({ action: 'adminResetPassword', targetUsername: targetUsername, newPassword: newPass });
-        try {
-            let res = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, redirect: "follow" }); let json = await res.json();
-            if(json.result === 'success') { showToast(`Sandi diubah!`); let text = `Halo, Admin SIMPRO.\nSandi akun Anda (@${targetUsername}) telah direset.\n*Sandi Baru:* ${newPass}`; if(waNumber && waNumber.length > 5) { window.open(`https://wa.me/${waNumber.replace(/^0/,'62')}?text=${encodeURIComponent(text)}`, '_blank'); } else if(emailTarget && emailTarget.includes('@')) { window.open(`mailto:${emailTarget}?subject=Sandi%20Baru&body=${encodeURIComponent(text)}`, '_blank'); } } else { showToast(json.message, true); }
-        } catch(e) { showToast("Gagal terhubung", true); }
-    }
-
-    async function handleRegister(e) {
-        e.preventDefault(); const btn = document.getElementById('btn-reg'); btn.innerText = "MENYIMPAN DATA..."; btn.disabled = true;
-        if (IS_OFFLINE) {
-            setTimeout(() => { 
-                let exists = usersList.find(x => x.username.toLowerCase() === document.getElementById('reg-username').value.trim().toLowerCase());
-                if(exists) { showToast('Username sudah dipakai!', true); btn.innerText = "DAFTARKAN AKUN"; btn.disabled = false; return; }
-                usersList.push({ name: document.getElementById('reg-name').value, username: document.getElementById('reg-username').value.trim(), role: 'petugas', whatsapp: document.getElementById('reg-whatsapp').value, email: document.getElementById('reg-email').value, avatar: 'Felix', password: document.getElementById('reg-password').value });
-                saveOfflineDB(); showToast('Registrasi Berhasil! Silakan Login.'); e.target.reset(); hideRegister(); btn.innerText = "DAFTARKAN AKUN"; btn.disabled = false; 
-            }, 800); return;
-        }
-        // Online
-        const payload = createPayload({ action: 'register', name: document.getElementById('reg-name').value, email: document.getElementById('reg-email').value, whatsapp: document.getElementById('reg-whatsapp').value, nik: document.getElementById('reg-nik').value, username: document.getElementById('reg-username').value.trim(), password: document.getElementById('reg-password').value, role: 'petugas', avatar: 'Felix' });
-        try { let res = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, redirect: "follow" }); let json = await res.json(); if(json.result === 'success') { showToast('Berhasil! Silakan Login.'); e.target.reset(); hideRegister(); fetchCloudData(); } else { showToast(json.message || 'Gagal mendaftar.', true); } } catch(err) { showToast('Gagal terhubung.', true); } btn.innerText = "DAFTARKAN AKUN"; btn.disabled = false;
-    }
-
-    async function submitForgotPassword() {
-        const identifier = document.getElementById('forgot-identifier').value.trim(); const message = document.getElementById('forgot-message').value.trim();
-        if(!identifier || !message) return showToast("Mohon lengkapi form!", true); const btn = document.getElementById('btn-submit-forgot'); btn.innerText = "MENGIRIM..."; btn.disabled = true;
-        if(IS_OFFLINE) {
-            setTimeout(() => { 
-                let foundUser = usersList.find(u => u.username.toLowerCase() === identifier.toLowerCase() || u.email.toLowerCase() === identifier.toLowerCase()); let finalUsername = foundUser ? foundUser.username : identifier; let userWa = foundUser ? (foundUser.whatsapp || "-") : "-"; let userEmail = foundUser ? (foundUser.email || identifier) : identifier;
-                inboxList.unshift({ id: "MSG-" + Date.now().toString().slice(-4), date: new Date().toISOString().split('T')[0], username: finalUsername, message: message, wa: userWa, email: userEmail, status: "Belum Diproses" });
-                saveOfflineDB(); showToast("Pesan dikirim ke Admin."); closeForgotPassword(); btn.innerText = "KIRIM PESAN KE ADMIN"; btn.disabled = false; if(currentUser && currentUser.role === 'admin') { updateInboxBadge(); renderInbox(); }
-            }, 800); return;
-        }
-        // Online
-        const payload = createPayload({ action: 'forgotPasswordRequest', identifier: identifier, message: message });
-        try { let res = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, redirect: "follow" }); let json = await res.json(); if(json.result === 'success') { showToast("Pesan dikirim."); closeForgotPassword(); } else { showToast(json.message, true); } } catch(e) { showToast("Gagal terhubung.", true); } btn.innerText = "KIRIM PESAN KE ADMIN"; btn.disabled = false;
-    }
-
-    function showToast(msg, err = false) { const t = document.getElementById('toast'); document.getElementById('toast-msg').innerText = msg; document.getElementById('toast-icon').className = err ? "fas fa-skull text-pink-600 mr-3 text-xl" : "fas fa-check-circle text-emerald-500 mr-3 text-xl"; t.classList.remove('-translate-y-40', 'opacity-0'); t.classList.add('translate-y-0', 'opacity-100'); setTimeout(() => { t.classList.remove('translate-y-0', 'opacity-100'); t.classList.add('-translate-y-40', 'opacity-0'); }, 3000); }
-    function handleLogout() { sessionStorage.removeItem('simpro_pro_session'); currentUser = null; location.reload(); }
-
-    function startAppFlow() {
-        document.getElementById('dash-name').innerText = currentUser.name; document.getElementById('dash-role').innerText = currentUser.role.toUpperCase(); updateAvatarDisplay(currentUser.avatar || 'Felix', 'header-avatar', 'header-avatar-fallback');
-        if(currentUser.role === 'admin') { document.getElementById('admin-tools').classList.remove('hidden'); const inboxBtn = document.getElementById('btn-inbox-header'); inboxBtn.classList.remove('hidden'); inboxBtn.classList.add('flex'); updateInboxBadge(); } else { document.getElementById('admin-tools').classList.add('hidden'); const inboxBtn = document.getElementById('btn-inbox-header'); inboxBtn.classList.add('hidden'); inboxBtn.classList.remove('flex'); }
-        
-        const micBtn = document.getElementById('mic-btn'); if(micBtn) micBtn.classList.remove('hidden');
-        
-        document.getElementById('login-screen').classList.add('hidden'); document.getElementById('login-screen').classList.remove('flex'); 
-        document.getElementById('register-screen').classList.add('hidden'); document.getElementById('register-screen').classList.remove('flex'); 
-        document.getElementById('main-app').classList.remove('hidden');
-        
-        fetchCloudData(); switchView('dashboard'); updateSyncBadge(); renderBanners();
+        try { let res = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, redirect: "follow" }); let json = await res.json(); if(json.result === 'success') { showToast("Profil Tersimpan di Cloud!"); currentUser.name = newName; currentUser.email = newEmail; currentUser.whatsapp = newWA; currentUser.avatar = newAvatar; if(newPass) currentUser.password = newPass; delete currentUser._tempAvatar; sessionStorage.setItem('simpro_pro_session', JSON.stringify(currentUser)); document.getElementById('dash-name').innerText = currentUser.name; updateAvatarDisplay(currentUser.avatar, 'header-avatar', 'header-avatar-fallback'); isEditingProfile = false; toggleEditProfileUI(); loadProfileData(); fetchCloudData(); } else { showToast(json.message || "Gagal", true); } } catch(err) { showToast("Gagal terhubung", true); } finally { btn.innerHTML = '<i class="fas fa-save mr-1"></i> SIMPAN PERBAIKAN'; btn.disabled = false; }
     }
 
     function updateAvatarDisplay(avatarData, imgElemId, fallbackElemId) { const imgEl = document.getElementById(imgElemId); const fallbackEl = document.getElementById(fallbackElemId); if(!imgEl || !fallbackEl) return; if(!avatarData) { imgEl.classList.add('hidden'); fallbackEl.classList.remove('hidden'); return; } let srcUrl = avatarData.length > 20 ? avatarData : `https://api.dicebear.com/7.x/avataaars/svg?seed=${avatarData}`; imgEl.src = srcUrl; imgEl.classList.remove('hidden'); fallbackEl.classList.add('hidden'); }
     function generateAvatarSelectors() { const container = document.getElementById('avatar-selector'); if(!container) return; container.innerHTML = ''; avatarSeeds.forEach(seed => { container.innerHTML += `<div onclick="selectAvatar('${seed}')" id="av-${seed}" class="w-10 h-10 avatar-opt bg-sky-50 rounded-full flex items-center justify-center text-sky-700 border cursor-pointer hover:bg-sky-200 transition"><i class="fas fa-user text-sm pointer-events-none"></i></div>`; }); }
     function selectAvatar(seed) { if(!isEditingProfile) return; document.querySelectorAll('.avatar-opt').forEach(el => el.classList.remove('selected')); const el = document.getElementById(`av-${seed}`); if(el) el.classList.add('selected'); updateAvatarDisplay(seed, 'edit-avatar-preview', 'edit-avatar-fallback'); if(currentUser) currentUser._tempAvatar = seed; }
-    
     function compressImageToBase64(file, maxSize, callback) { const reader = new FileReader(); reader.onload = function(e) { const img = new Image(); img.onload = function() { const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d'); let w = img.width, h = img.height; if (w > h) { if (w > maxSize) { h *= maxSize / w; w = maxSize; } } else { if (h > maxSize) { w *= maxSize / h; h = maxSize; } } canvas.width = w; canvas.height = h; ctx.drawImage(img, 0, 0, w, h); callback(canvas.toDataURL('image/jpeg', 0.6)); }; img.src = e.target.result; }; reader.readAsDataURL(file); }
     function handleAvatarUpload(event) { const file = event.target.files[0]; if(!file) return; compressImageToBase64(file, 200, function(dataUrl) { document.getElementById('edit-avatar-preview').src = dataUrl; document.getElementById('edit-avatar-preview').classList.remove('hidden'); document.getElementById('edit-avatar-fallback').classList.add('hidden'); if(currentUser) currentUser._tempAvatar = dataUrl; document.querySelectorAll('.avatar-opt').forEach(el => el.classList.remove('selected')); showToast('Foto profil disiapkan!'); }); }
     function togglePassword(i, icon) { const inp = document.getElementById(i); const ic = document.getElementById(icon); if(inp.type==='password'){ inp.type='text'; ic.className='fas fa-eye-slash text-emerald-600'; } else { inp.type='password'; ic.className='fas fa-eye text-slate-400'; } }
@@ -1297,10 +1200,10 @@
     function updateBangsaInduk() { const l = document.getElementById('input-spesies').value === 'Sapi' ? listSapi : listBabi; updateBangsaList('input-bangsa-induk', l); updateBangsaList('input-pejantan', l); }
     function toggleFormFields() { const t = document.getElementById('form-type').value; ['ib', 'pkb', 'kelahiran'].forEach(id => document.getElementById(`fields-${id}`).classList.add('hidden')); if(t==='IB') { document.getElementById('fields-ib').classList.remove('hidden'); document.getElementById('riwayat-ib-sebelumnya').classList.add('hidden'); } else { document.getElementById('riwayat-ib-sebelumnya').classList.remove('hidden'); } if(t==='PKB') document.getElementById('fields-pkb').classList.remove('hidden'); if(t==='Kelahiran') document.getElementById('fields-kelahiran').classList.remove('hidden'); }
     
-    function getGPSLocation() { const st = document.getElementById('gps-status'); st.innerHTML = 'Melacak...'; if (navigator.geolocation) { navigator.geolocation.getCurrentPosition( pos => { const coords = `${pos.coords.latitude.toFixed(5)}, ${pos.coords.longitude.toFixed(5)}`; document.getElementById('input-gps-tampil').value = coords; document.getElementById('input-gps-hidden').value = coords; st.innerHTML='Akurasi GPS didapatkan'; }, err => { st.innerHTML='GPS tidak aktif. Nyalakan Lokasi HP.'; }, { enableHighAccuracy: true, timeout: 10000 }); } }
+    function getGPSLocation() { const st = document.getElementById('gps-status'); st.innerHTML = 'Melacak...'; if (navigator.geolocation) { navigator.geolocation.getCurrentPosition( pos => { const coords = `${pos.coords.latitude.toFixed(5)},${pos.coords.longitude.toFixed(5)}`; document.getElementById('input-gps-tampil').value = coords; document.getElementById('input-gps-hidden').value = coords; st.innerHTML='Akurasi GPS didapatkan'; }, err => { st.innerHTML='GPS tidak aktif. Nyalakan Lokasi HP.'; }, { enableHighAccuracy: true, timeout: 10000 }); } }
     function handleLaporanFotoUpload(event, previewId, fallbackId, inputDataId) { const file = event.target.files[0]; if(!file) return; compressImageToBase64(file, 400, function(dataUrl) { document.getElementById(previewId).src = dataUrl; document.getElementById(previewId).classList.remove('hidden'); document.getElementById(fallbackId).classList.add('hidden'); document.getElementById(inputDataId).value = dataUrl; showToast('Foto dilampirkan!'); }); }
 
-    // --- FILTER SISTEM DATA LENGKAP (KECAMATAN & DESA/KELURAHAN) ---
+    // --- FILTER & PENCARIAN (DIJAMIN UTUH) ---
     function setLayananFilter(type) { 
         activeLayananFilter = type; 
         document.querySelectorAll('.layanan-tab').forEach(el => el.className = "layanan-tab flex flex-col items-center justify-center py-4 rounded-xl border-2 border-transparent bg-white text-slate-500 shadow-md transition"); 
@@ -1345,7 +1248,7 @@
             if(fDesa !== 'Semua' && r.Lokasi !== fDesa) match = false; 
             
             if(fSearch) { 
-                let textToSearch = `${r.ID_Sistem} ${r.Peternak} ${r.ID_Hewan} ${r.ID_Eartag}`.toLowerCase(); 
+                let textToSearch = `${r.ID_Sistem}${r.Peternak} ${r.ID_Hewan}${r.ID_Eartag}`.toLowerCase(); 
                 if(!textToSearch.includes(fSearch)) match = false; 
             }
             return match;
@@ -1374,12 +1277,12 @@
         fd.forEach((r, idx) => {
             let detailData = "-"; 
             if(r.Layanan === 'IB') detailData = `IB Ke: ${r.IB_Ke} | B.Pejantan: ${r.Bangsa_Pejantan} (${r.ID_Pejantan})`; 
-            else if(r.Layanan === 'PKB') detailData = `Hasil PKB: ${r.Hasil_PKB} | Usia Kebuntingan: ${r.Usia_Kebuntingan}`; 
-            else if(r.Layanan === 'Kelahiran') detailData = `Status Lahir: ${r.Status_Lahir} | Nama Pedet: ${r.Nama_Pedet}`;
+            else if(r.Layanan === 'PKB') detailData = `Hasil PKB: ${r.Hasil_PKB} \vert{} Usia Kebuntingan:${r.Usia_Kebuntingan}`; 
+            else if(r.Layanan === 'Kelahiran') detailData = `Status Lahir: ${r.Status_Lahir} \vert{} Nama Pedet:${r.Nama_Pedet}`;
             
             let syncIcon = r.syncStatus === 'pending' ? '<i class="fas fa-clock text-amber-500"></i>' : '<i class="fas fa-check-circle text-emerald-500"></i>';
             
-            html += `<tr onclick="openDetailModal('${r.ID_Sistem}')" class="hover:bg-slate-50 transition cursor-pointer"><td class="px-4 py-3">${idx+1}</td><td class="px-4 py-3 text-center">${syncIcon}</td><td class="px-4 py-3 font-mono">${r.Tanggal} <br><span class="text-[9px] text-slate-400">${r.Waktu}</span></td><td class="px-4 py-3 font-black text-sky-600">${r.Layanan}</td><td class="px-4 py-3 font-bold">${r.Peternak} <br><span class="text-[9px] font-normal text-slate-500"><i class="fas fa-phone mr-1"></i>${r.Kontak}</span></td><td class="px-4 py-3">${r.Kecamatan} <br><span class="text-[9px] text-slate-500">${r.Lokasi}</span></td><td class="px-4 py-3 font-mono text-indigo-700">${r.ID_Hewan} <br><span class="text-[9px] font-bold text-slate-500">${r.Spesies} - ${r.Bangsa_Induk}</span></td><td class="px-4 py-3 text-emerald-700 font-semibold">${detailData}</td><td class="px-4 py-3 text-slate-700">${r.Petugas}</td></tr>`;
+            html += `<tr onclick="openDetailModal('${r.ID_Sistem}')" class="hover:bg-slate-50 transition cursor-pointer"><td class="px-4 py-3">${idx+1}</td><td class="px-4 py-3 text-center">${syncIcon}</td><td class="px-4 py-3 font-mono">${r.Tanggal} <br><span class="text-[9px] text-slate-400">${r.Waktu}</span></td><td class="px-4 py-3 font-black text-sky-600">${r.Layanan}</td><td class="px-4 py-3 font-bold">${r.Peternak} <br><span class="text-[9px] font-normal text-slate-500"><i class="fas fa-phone mr-1"></i>${r.Kontak}</span></td><td class="px-4 py-3">${r.Kecamatan} <br><span class="text-[9px] text-slate-500">${r.Lokasi}</span></td><td class="px-4 py-3 font-mono text-indigo-700">${r.ID_Hewan} <br><span class="text-[9px] font-bold text-slate-500">${r.Spesies} -${r.Bangsa_Induk}</span></td><td class="px-4 py-3 text-emerald-700 font-semibold">${detailData}</td><td class="px-4 py-3 text-slate-700">${r.Petugas}</td></tr>`;
         }); 
         html += `</tbody></table></div>`; 
         c.innerHTML = html;
@@ -1388,16 +1291,16 @@
     function openDetailModal(idSistem) {
         const r = reports.find(x => x.ID_Sistem === idSistem); if(!r) return; 
         document.getElementById('modal-title').innerText = `Detail ${r.Layanan}`; 
-        document.getElementById('modal-subtitle').innerText = `Oleh: ${r.Petugas} • ${r.Tanggal} ${r.Waktu}`;
+        document.getElementById('modal-subtitle').innerText = `Oleh: ${r.Petugas} • ${r.Tanggal}${r.Waktu}`;
         
         let fotoSection = r.Foto_Dokumentasi && r.Foto_Dokumentasi.length > 50 ? `<div class="mt-4 text-center"><p class="text-[9px] text-amber-600 font-bold uppercase mb-2">Foto Dokumentasi</p><img src="${r.Foto_Dokumentasi}" class="w-full h-48 object-cover rounded-xl border shadow-sm"></div>` : ''; 
         let detailKhusus = "";
         
-        if(r.Layanan === 'IB') detailKhusus = `<div class="grid grid-cols-2 gap-2"><p><b>IB Ke:</b> ${r.IB_Ke}</p><p><b>Bangsa Pejantan:</b> ${r.Bangsa_Pejantan}</p><p><b>ID Pejantan:</b> ${r.ID_Pejantan}</p><p><b>ID Pembuatan:</b> ${r.ID_Pembuatan}</p></div>`; 
-        else if (r.Layanan === 'PKB') detailKhusus = `<div class="grid grid-cols-2 gap-2"><p><b>Hasil Diagnosa PKB:</b> ${r.Hasil_PKB}</p><p><b>Usia Kebuntingan:</b> ${r.Usia_Kebuntingan}</p><p><b>Tanggal IB Lalu:</b> ${r.Tgl_IB_Lalu}</p><p><b>Pelapor IB Lalu:</b> ${r.Pelapor_IB_Lalu}</p></div>`; 
-        else if (r.Layanan === 'Kelahiran') detailKhusus = `<div class="grid grid-cols-2 gap-2"><p><b>Nama Pedet/Anak:</b> ${r.Nama_Pedet}</p><p><b>Status Lahir:</b> ${r.Status_Lahir}</p><p><b>Tanggal IB Lalu:</b> ${r.Tgl_IB_Lalu}</p><p><b>Pelapor IB Lalu:</b> ${r.Pelapor_IB_Lalu}</p></div>`;
+        if(r.Layanan === 'IB') detailKhusus = `<div class="grid grid-cols-2 gap-2"><p><b>IB Ke:</b> ${r.IB_Ke}</p><p><b>Bangsa Pejantan:</b>${r.Bangsa_Pejantan}</p><p><b>ID Pejantan:</b> ${r.ID_Pejantan}</p><p><b>ID Pembuatan:</b>${r.ID_Pembuatan}</p></div>`; 
+        else if (r.Layanan === 'PKB') detailKhusus = `<div class="grid grid-cols-2 gap-2"><p><b>Hasil Diagnosa PKB:</b> ${r.Hasil_PKB}</p><p><b>Usia Kebuntingan:</b>${r.Usia_Kebuntingan}</p><p><b>Tanggal IB Lalu:</b> ${r.Tgl_IB_Lalu}</p><p><b>Pelapor IB Lalu:</b>${r.Pelapor_IB_Lalu}</p></div>`; 
+        else if (r.Layanan === 'Kelahiran') detailKhusus = `<div class="grid grid-cols-2 gap-2"><p><b>Nama Pedet/Anak:</b> ${r.Nama_Pedet}</p><p><b>Status Lahir:</b>${r.Status_Lahir}</p><p><b>Tanggal IB Lalu:</b> ${r.Tgl_IB_Lalu}</p><p><b>Pelapor IB Lalu:</b>${r.Pelapor_IB_Lalu}</p></div>`;
         
-        let html = `<div class="overflow-hidden rounded-xl border bg-white/70 shadow-sm p-4 space-y-2 text-xs"><p class="border-b pb-2 mb-2"><b>ID Laporan:</b> <span class="font-mono text-sky-700">${r.ID_Sistem}</span></p><div class="grid grid-cols-2 gap-2"><p><b>Peternak:</b> ${r.Peternak}</p><p><b>Kontak:</b> ${r.Kontak}</p><p><b>Kecamatan:</b> ${r.Kecamatan || '-'}</p><p><b>Desa:</b> ${r.Lokasi}</p><p><b>Spesies Hewan:</b> ${r.Spesies}</p><p><b>Bangsa Induk:</b> ${r.Bangsa_Induk}</p><p><b>ID Hewan:</b> ${r.ID_Hewan}</p><p><b>No Eartag:</b> ${r.ID_Eartag}</p></div><p class="pt-2"><b>GPS Koordinat:</b> <a href="https://maps.google.com/?q=${r.GPS}" target="_blank" class="text-blue-600 font-semibold hover:underline"><i class="fas fa-map-marker-alt mr-1"></i> Buka di Maps (${r.GPS})</a></p><div class="mt-3 pt-3 border-t border-slate-200"><p class="font-black text-sky-800 mb-3 text-sm">Rincian Penanganan Khusus (${r.Layanan})</p>${detailKhusus}</div></div>${fotoSection}`;
+        let html = `<div class="overflow-hidden rounded-xl border bg-white/70 shadow-sm p-4 space-y-2 text-xs"><p class="border-b pb-2 mb-2"><b>ID Laporan:</b> <span class="font-mono text-sky-700">${r.ID_Sistem}</span></p><div class="grid grid-cols-2 gap-2"><p><b>Peternak:</b> ${r.Peternak}</p><p><b>Kontak:</b>${r.Kontak}</p><p><b>Kecamatan:</b> ${r.Kecamatan \vert{}\vert{} '-'}</p><p><b>Desa:</b>${r.Lokasi}</p><p><b>Spesies Hewan:</b> ${r.Spesies}</p><p><b>Bangsa Induk:</b>${r.Bangsa_Induk}</p><p><b>ID Hewan:</b> ${r.ID_Hewan}</p><p><b>No Eartag:</b>${r.ID_Eartag}</p></div><p class="pt-2"><b>GPS Koordinat:</b> <a href="https://maps.google.com/?q=${r.GPS}" target="_blank" class="text-blue-600 font-semibold hover:underline"><i class="fas fa-map-marker-alt mr-1"></i> Buka di Maps (${r.GPS})</a></p><div class="mt-3 pt-3 border-t border-slate-200"><p class="font-black text-sky-800 mb-3 text-sm">Rincian Penanganan Khusus (${r.Layanan})</p>${detailKhusus}</div></div>${fotoSection}`;
         
         document.getElementById('modal-content').innerHTML = html; 
         const mod = document.getElementById('detail-modal'); 
@@ -1411,6 +1314,116 @@
         fd.forEach((r, idx) => { aoa.push([ idx+1, r.ID_Sistem, r.Tanggal, r.Waktu, r.Petugas, r.Layanan, r.Peternak, r.Kontak, r.Kecamatan, r.Lokasi, r.Spesies, r.ID_Hewan, r.ID_Eartag, r.Bangsa_Induk, r.IB_Ke||'-', r.ID_Pejantan||'-', r.ID_Pembuatan||'-', r.Bangsa_Pejantan||'-', r.Hasil_PKB||'-', r.Usia_Kebuntingan||'-', r.Nama_Pedet||'-', r.Status_Lahir||'-', r.Tgl_IB_Lalu||'-', r.Pelapor_IB_Lalu||'-' ]); });
         const wb = XLSX.utils.book_new(); const ws = XLSX.utils.aoa_to_sheet(aoa); XLSX.utils.book_append_sheet(wb, ws, "Laporan_SIMPRO"); XLSX.writeFile(wb, `Data_Laporan_SIMPRO_${activeLayananFilter}_${new Date().toISOString().slice(0,10)}.xlsx`); showToast("Laporan Excel berhasil diunduh!");
     }
+
+    // --- MANAJEMEN ADMIN (USER & INBOX) ---
+    function renderUserManagement() {
+        const c = document.getElementById('users-container'); if(!c) return; c.innerHTML = '';
+        if(usersList.length === 0) { c.innerHTML = '<p class="text-xs text-slate-500 text-center py-4">Belum ada akun petugas terdaftar.</p>'; return; }
+        usersList.forEach(u => {
+            let adminBtns = '';
+            if (currentUser && currentUser.role === 'admin') { 
+                let btnHapus = u.username !== currentUser.username ? `<button type="button" onclick="adminDeleteUser('${u.username}')" class="bg-rose-50 text-rose-600 hover:bg-rose-100 hover:text-rose-700 px-3 py-1.5 rounded-lg text-[9px] font-black transition shadow-sm active:scale-95"><i class="fas fa-trash mr-1"></i> HAPUS</button>` : ``; 
+                adminBtns = `<div class="mt-3 pt-2 border-t border-slate-100 flex justify-end gap-2"><button type="button" onclick="adminEditUser('${u.username}')" class="bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-700 px-3 py-1.5 rounded-lg text-[9px] font-black transition shadow-sm active:scale-95"><i class="fas fa-pencil-alt mr-1"></i> EDIT</button>${btnHapus}</div>`; 
+            }
+            c.innerHTML += `<div class="glass-card p-4 shadow-sm mb-3"><div class="flex justify-between items-start"><div><p class="text-sm font-black text-slate-800">${u.name}</p><p class="text-[10px] text-sky-600 font-mono mt-0.5">@${u.username}</p><p class="text-[10px] text-slate-500 mt-1"><i class="fab fa-whatsapp text-emerald-500 mr-1"></i>${u.whatsapp || '-'} <br> <i class="far fa-envelope text-blue-400 mr-1 mt-1"></i>${u.email || '-'}</p></div><span class="text-[9px] ${u.role === 'admin' ? 'bg-indigo-100 text-indigo-700' : 'bg-emerald-100 text-emerald-700'} px-2.5 py-1 rounded-full font-black uppercase shadow-sm">${u.role}</span></div>${adminBtns}</div>`;
+        });
+    }
+
+    function adminEditUser(targetUsername) { 
+        let u = usersList.find(x => x.username === targetUsername); if(!u) return; 
+        document.getElementById('admin-edit-old-username').value = u.username; document.getElementById('admin-edit-name').value = u.name; document.getElementById('admin-edit-username').value = u.username; document.getElementById('admin-edit-role').value = u.role || 'petugas'; document.getElementById('admin-edit-email').value = u.email || ''; document.getElementById('admin-edit-wa').value = u.whatsapp || ''; document.getElementById('admin-edit-password').value = ''; document.getElementById('admin-edit-modal').classList.remove('hidden'); document.getElementById('admin-edit-modal').classList.add('flex'); 
+    }
+    function closeAdminEditModal() { document.getElementById('admin-edit-modal').classList.add('hidden'); document.getElementById('admin-edit-modal').classList.remove('flex'); }
+
+    async function submitAdminEditUser(e) {
+        e.preventDefault(); 
+        const oldUser = document.getElementById('admin-edit-old-username').value; const newName = document.getElementById('admin-edit-name').value; const newRole = document.getElementById('admin-edit-role').value; const newEmail = document.getElementById('admin-edit-email').value; const newWa = document.getElementById('admin-edit-wa').value; const newPass = document.getElementById('admin-edit-password').value;
+        if (IS_OFFLINE) { 
+            let idx = usersList.findIndex(x => x.username === oldUser); 
+            if(idx > -1) { usersList[idx].name = newName; usersList[idx].role = newRole; usersList[idx].email = newEmail; usersList[idx].whatsapp = newWa; if(newPass) usersList[idx].password = newPass; saveOfflineDB(); showToast(`Data diperbarui!`); renderUserManagement(); } 
+            closeAdminEditModal(); return; 
+        }
+        const payload = createPayload({ action: 'adminEditUser', oldUsername: oldUser, name: newName, role: newRole, email: newEmail, whatsapp: newWa, password: newPass });
+        try { let res = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, redirect: "follow" }); let json = await res.json(); if(json.result === 'success') { showToast(`User diperbarui.`); fetchCloudData(); closeAdminEditModal(); } else { showToast(json.message, true); } } catch(err) { showToast('Gagal terhubung', true); }
+    }
+
+    async function adminDeleteUser(targetUsername) { 
+        if(!confirm(`PERINGATAN: Yakin ingin menghapus permanen akun petugas @${targetUsername}?`)) return; 
+        if(IS_OFFLINE) { usersList = usersList.filter(u => u.username !== targetUsername); saveOfflineDB(); showToast(`Akun dihapus.`); renderUserManagement(); return; } 
+        const payload = createPayload({ action: 'deleteUser', targetUsername: targetUsername });
+        try { let res = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, redirect: "follow" }); let json = await res.json(); if(json.result === 'success') { showToast(`Akun dihapus.`); fetchCloudData(); } else { showToast(json.message, true); } } catch(err) { showToast('Gagal terhubung', true); }
+    }
+
+    function renderInbox() {
+        const badge = document.getElementById('inbox-badge'); const c = document.getElementById('inbox-container'); if(!c) return; c.innerHTML = '';
+        let pendingList = inboxList.filter(x => x.status === 'Belum Diproses'); if(pendingList.length > 0) { badge.innerText = pendingList.length; badge.classList.remove('hidden'); badge.classList.add('flex'); } else { badge.classList.add('hidden'); badge.classList.remove('flex'); }
+        if(inboxList.length === 0) { c.innerHTML = '<p class="text-xs text-slate-500 text-center py-4">Tidak ada pesan masuk.</p>'; return; }
+        inboxList.forEach(m => {
+            let actionBtn = m.status === 'Belum Diproses' ? `<div class="grid grid-cols-2 gap-2 mt-3"><button type="button" onclick="adminResetPasswordAndReply('${m.username}', '${m.wa}', '${m.email}')" class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-2 rounded-lg text-[9px] font-black shadow-sm transition"><i class="fas fa-key mr-1"></i> RESET SANDI</button><button type="button" onclick="adminResolveMessage('${m.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2 py-2 rounded-lg text-[9px] font-black shadow-sm transition"><i class="fas fa-check-double mr-1"></i> SELESAI</button></div>` : `<span class="bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-lg text-[9px] font-black w-full text-center block mt-2 shadow-sm"><i class="fas fa-check-circle mr-1"></i> DISELESAIKAN</span>`;
+            c.innerHTML += `<div class="glass-card p-4 shadow-sm mb-3 border-l-4 ${m.status === 'Belum Diproses' ? 'border-rose-500' : 'border-emerald-500'}"><p class="text-[10px] text-slate-400 mb-1">ID Keluhan: ${m.id} | ${m.date}</p><p class="text-sm font-black text-slate-800">@${m.username}</p><div class="my-2 bg-rose-50 p-3 rounded-xl border border-rose-100"><p class="text-xs text-slate-700 font-semibold italic">"${m.message}"</p></div><div class="grid grid-cols-2 gap-2 mt-2"><a href="https://wa.me/${m.wa.replace(/^0/, '62')}" target="_blank" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-600 text-center py-1.5 rounded text-[10px] font-bold transition"><i class="fab fa-whatsapp mr-1"></i> WA: ${m.wa}</a><a href="mailto:${m.email}" class="bg-blue-50 hover:bg-blue-100 text-blue-600 text-center py-1.5 rounded text-[10px] font-bold transition"><i class="far fa-envelope mr-1"></i> Email</a></div>${actionBtn}</div>`;
+        });
+    }
+
+    async function adminResolveMessage(idMsg) { 
+        if(IS_OFFLINE) { let msg = inboxList.find(x => x.id === idMsg); if(msg) msg.status = 'Telah Diselesaikan'; saveOfflineDB(); showToast(`Pesan diselesaikan.`); renderInbox(); updateInboxBadge(); return; } 
+        const payload = createPayload({ action: 'resolveMessage', idMsg: idMsg });
+        try { let res = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, redirect: "follow" }); let json = await res.json(); if(json.result === 'success') { showToast(`Diselesaikan.`); fetchCloudData(); } } catch(err) { showToast('Gagal terhubung', true); }
+    }
+
+    async function adminResetPasswordAndReply(targetUsername, waNumber, emailTarget) { 
+        const newPass = prompt(`Masukkan Kata Sandi Baru untuk pengguna @${targetUsername}:`); if(!newPass) return; 
+        if(IS_OFFLINE) { let u = usersList.find(x => x.username === targetUsername); if(u) u.password = newPass; saveOfflineDB(); showToast(`Sandi @${targetUsername} diubah!`); return; } 
+        const payload = createPayload({ action: 'adminResetPassword', targetUsername: targetUsername, newPassword: newPass });
+        try {
+            let res = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, redirect: "follow" }); let json = await res.json();
+            if(json.result === 'success') { showToast(`Sandi diubah!`); let text = `Halo, Admin SIMPRO.\nSandi akun Anda (@${targetUsername}) telah direset.\n*Sandi Baru:* ${newPass}`; if(waNumber && waNumber.length > 5) { window.open(`https://wa.me/${waNumber.replace(/^0/,'62')}?text=${encodeURIComponent(text)}`, '_blank'); } else if(emailTarget && emailTarget.includes('@')) { window.open(`mailto:${emailTarget}?subject=Sandi%20Baru&body=${encodeURIComponent(text)}`, '_blank'); } } else { showToast(json.message, true); }
+        } catch(e) { showToast("Gagal terhubung", true); }
+    }
+
+    async function handleRegister(e) {
+        e.preventDefault(); const btn = document.getElementById('btn-reg'); btn.innerText = "MENYIMPAN DATA..."; btn.disabled = true;
+        if (IS_OFFLINE) {
+            setTimeout(() => { 
+                let exists = usersList.find(x => x.username.toLowerCase() === document.getElementById('reg-username').value.trim().toLowerCase());
+                if(exists) { showToast('Username sudah dipakai!', true); btn.innerText = "DAFTARKAN AKUN"; btn.disabled = false; return; }
+                usersList.push({ name: document.getElementById('reg-name').value, username: document.getElementById('reg-username').value.trim(), role: 'petugas', whatsapp: document.getElementById('reg-whatsapp').value, email: document.getElementById('reg-email').value, avatar: 'Felix', password: document.getElementById('reg-password').value });
+                saveOfflineDB(); showToast('Registrasi Berhasil! Silakan Login.'); e.target.reset(); hideRegister(); btn.innerText = "DAFTARKAN AKUN"; btn.disabled = false; 
+            }, 800); return;
+        }
+        const payload = createPayload({ action: 'register', name: document.getElementById('reg-name').value, email: document.getElementById('reg-email').value, whatsapp: document.getElementById('reg-whatsapp').value, nik: document.getElementById('reg-nik').value, username: document.getElementById('reg-username').value.trim(), password: document.getElementById('reg-password').value, role: 'petugas', avatar: 'Felix' });
+        try { let res = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, redirect: "follow" }); let json = await res.json(); if(json.result === 'success') { showToast('Berhasil! Silakan Login.'); e.target.reset(); hideRegister(); fetchCloudData(); } else { showToast(json.message || 'Gagal mendaftar.', true); } } catch(err) { showToast('Gagal terhubung.', true); } btn.innerText = "DAFTARKAN AKUN"; btn.disabled = false;
+    }
+
+    async function submitForgotPassword() {
+        const identifier = document.getElementById('forgot-identifier').value.trim(); const message = document.getElementById('forgot-message').value.trim();
+        if(!identifier || !message) return showToast("Mohon lengkapi form!", true); const btn = document.getElementById('btn-submit-forgot'); btn.innerText = "MENGIRIM..."; btn.disabled = true;
+        if(IS_OFFLINE) {
+            setTimeout(() => { 
+                let foundUser = usersList.find(u => u.username.toLowerCase() === identifier.toLowerCase() || u.email.toLowerCase() === identifier.toLowerCase()); let finalUsername = foundUser ? foundUser.username : identifier; let userWa = foundUser ? (foundUser.whatsapp || "-") : "-"; let userEmail = foundUser ? (foundUser.email || identifier) : identifier;
+                inboxList.unshift({ id: "MSG-" + Date.now().toString().slice(-4), date: new Date().toISOString().split('T')[0], username: finalUsername, message: message, wa: userWa, email: userEmail, status: "Belum Diproses" });
+                saveOfflineDB(); showToast("Pesan dikirim ke Admin."); closeForgotPassword(); btn.innerText = "KIRIM PESAN KE ADMIN"; btn.disabled = false; if(currentUser && currentUser.role === 'admin') { updateInboxBadge(); renderInbox(); }
+            }, 800); return;
+        }
+        const payload = createPayload({ action: 'forgotPasswordRequest', identifier: identifier, message: message });
+        try { let res = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, redirect: "follow" }); let json = await res.json(); if(json.result === 'success') { showToast("Pesan dikirim."); closeForgotPassword(); } else { showToast(json.message, true); } } catch(e) { showToast("Gagal terhubung.", true); } btn.innerText = "KIRIM PESAN KE ADMIN"; btn.disabled = false;
+    }
+
+    function showToast(msg, err = false) { const t = document.getElementById('toast'); document.getElementById('toast-msg').innerText = msg; document.getElementById('toast-icon').className = err ? "fas fa-skull text-pink-600 mr-3 text-xl" : "fas fa-check-circle text-emerald-500 mr-3 text-xl"; t.classList.remove('-translate-y-40', 'opacity-0'); t.classList.add('translate-y-0', 'opacity-100'); setTimeout(() => { t.classList.remove('translate-y-0', 'opacity-100'); t.classList.add('-translate-y-40', 'opacity-0'); }, 3000); }
+    function handleLogout() { sessionStorage.removeItem('simpro_pro_session'); currentUser = null; location.reload(); }
+
+    function startAppFlow() {
+        document.getElementById('dash-name').innerText = currentUser.name; document.getElementById('dash-role').innerText = currentUser.role.toUpperCase(); updateAvatarDisplay(currentUser.avatar || 'Felix', 'header-avatar', 'header-avatar-fallback');
+        if(currentUser.role === 'admin') { document.getElementById('admin-tools').classList.remove('hidden'); const inboxBtn = document.getElementById('btn-inbox-header'); inboxBtn.classList.remove('hidden'); inboxBtn.classList.add('flex'); updateInboxBadge(); } else { document.getElementById('admin-tools').classList.add('hidden'); const inboxBtn = document.getElementById('btn-inbox-header'); inboxBtn.classList.add('hidden'); inboxBtn.classList.remove('flex'); }
+        
+        const micBtn = document.getElementById('mic-btn'); if(micBtn) micBtn.classList.remove('hidden');
+        
+        document.getElementById('login-screen').classList.add('hidden'); document.getElementById('login-screen').classList.remove('flex'); 
+        document.getElementById('register-screen').classList.add('hidden'); document.getElementById('register-screen').classList.remove('flex'); 
+        document.getElementById('main-app').classList.remove('hidden');
+        
+        fetchCloudData(); switchView('dashboard'); updateSyncBadge(); renderBanners();
+    }
+
     </script>
 </body>
 </html>
