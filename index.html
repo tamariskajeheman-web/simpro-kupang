@@ -103,7 +103,7 @@
 <body>
     <!-- BANNER OFFLINE -->
     <div id="offline-banner" class="fixed top-0 left-0 w-full bg-amber-500 text-white text-center py-1.5 text-[10px] font-black z-[200] tracking-widest hidden shadow-md">
-        <i class="fas fa-database mr-1"></i> MODE SIMULASI LOKAL - AKTIF (Data Sesi Aman Saat Minimize)
+        <i class="fas fa-database mr-1"></i> MODE SIMULASI LOKAL - AKTIF (Sesi Aman Saat Minimize)
     </div>
 
     <div class="animated-bg"></div>
@@ -358,7 +358,7 @@
                     <div id="pengingat-list" class="space-y-3"></div>
                 </div>
 
-                <!-- KARTU STATISTIK -->
+                <!-- KARTU STATISTIK (PROPORSIONAL) -->
                 <div class="grid grid-cols-2 gap-3 mb-6">
                     <div class="glass-card p-4 text-center border-t-4 border-sky-500 cursor-pointer shadow-sm relative overflow-hidden" onclick="switchView('data'); setLayananFilter('IB');">
                         <i class="fas fa-syringe absolute -right-2 -bottom-2 text-sky-500 opacity-10" style="font-size: 3.5rem;"></i>
@@ -393,6 +393,7 @@
                 <div class="glass-panel p-6 mb-8 shadow-md">
                     <h2 class="text-2xl font-black mb-4 text-gradient font-outfit">Input Pelaporan</h2>
                     <form id="form-laporan-utama" hx-post="ISI_DENGAN_URL_WEB_APP_ANDA_YANG_BARU_DISINI" hx-trigger="submit" hx-indicator="#loading-laporan" hx-on:htmx:before-request="prepareHtmxData(event)" hx-on:htmx:after-request="handleHtmxResponse(event)">
+                        
                         <input type="hidden" name="action" value="submitReport">
                         <input type="hidden" name="ID_Sistem" id="htmx-id-sistem">
                         <input type="hidden" name="Waktu" id="htmx-waktu">
@@ -417,7 +418,7 @@
                         </div>
 
                         <div class="kartu-form tema-foto">
-                            <label><i class="fas fa-camera mr-2 text-amber-600"></i>Foto Dokumentasi</label>
+                            <label><i class="fas fa-camera mr-2 text-amber-600"></i>Foto Dokumentasi Pelayanan</label>
                             <div class="flex items-center gap-4">
                                 <div class="w-20 h-20 rounded-xl bg-slate-50 border-2 border-dashed border-slate-300 flex items-center justify-center overflow-hidden relative">
                                     <img id="preview-foto-laporan" src="" class="w-full h-full object-cover hidden">
@@ -426,7 +427,7 @@
                                 <div class="flex-1">
                                     <input type="file" id="input-foto-file" accept="image/*" class="hidden" onchange="handleLaporanFotoUpload(event, 'preview-foto-laporan', 'icon-foto-placeholder', 'input-foto-data')">
                                     <button type="button" onclick="document.getElementById('input-foto-file').click()" class="bg-amber-100 text-amber-700 border border-amber-300 text-[10px] font-black px-4 py-3 rounded-xl w-full active:scale-95 transition">
-                                        <i class="fas fa-upload mr-1"></i> Ambil Foto
+                                        <i class="fas fa-upload mr-1"></i> Ambil / Pilih Foto
                                     </button>
                                 </div>
                             </div>
@@ -435,7 +436,7 @@
                         <div class="kartu-form">
                             <label><i class="fas fa-map-location-dot mr-2 text-sky-600"></i>Data Peternak & Lokasi</label>
                             <div class="grid-2-kolom">
-                                <div class="grup-input"><label>PETERNAK</label><input type="text" name="Peternak" class="input-standar" required></div>
+                                <div class="grup-input"><label>NAMA PETERNAK</label><input type="text" name="Peternak" class="input-standar" required></div>
                                 <div class="grup-input"><label>NO HP/NIK</label><input type="text" name="Kontak" class="input-standar" required></div>
                             </div>
                             <div class="grid-2-kolom">
@@ -451,7 +452,7 @@
                             <div class="flex gap-2 items-end">
                                 <div class="grup-input flex-1 mb-0">
                                     <label>GPS KOORDINAT</label>
-                                    <input type="text" id="input-gps-tampil" class="input-standar text-xs font-mono text-sky-700 bg-slate-50" placeholder="Opsional" readonly>
+                                    <input type="text" id="input-gps-tampil" class="input-standar text-xs font-mono text-sky-700 bg-slate-50" placeholder="Opsional (Klik Tombol)" readonly>
                                 </div>
                                 <button type="button" onclick="getGPSLocation()" class="bg-sky-100 text-sky-700 border border-sky-300 px-4 rounded-xl text-xs font-bold h-[45px] shadow-sm active:scale-95 transition">
                                     <i class="fas fa-satellite-dish"></i>
@@ -469,9 +470,9 @@
                                 </select>
                             </div>
                             <div class="grid-2-kolom">
-                                <div class="grup-input"><label>ID LOKAL</label><input type="text" name="ID_Hewan" class="input-standar uppercase" required></div>
+                                <div class="grup-input"><label>ID LOKAL (HEWAN)</label><input type="text" name="ID_Hewan" class="input-standar uppercase" required></div>
                                 <div class="grup-input">
-                                    <label>EARTAG</label>
+                                    <label>EARTAG NASIONAL</label>
                                     <div class="relative flex items-center">
                                         <input type="text" name="ID_Eartag" id="input-eartag-form" class="input-standar uppercase pr-10">
                                         <button type="button" onclick="openScannerModal()" class="absolute right-3 text-emerald-600 hover:text-emerald-800 transition active:scale-90"><i class="fas fa-qrcode text-lg"></i></button>
@@ -487,7 +488,7 @@
                         <div id="riwayat-ib-sebelumnya" class="hidden kartu-form tema-foto">
                             <label><i class="fas fa-clock-rotate-left mr-2 text-amber-600"></i>Riwayat Layanan Terakhir</label>
                             <div class="grid-2-kolom">
-                                <div class="grup-input"><label>TGL IB LALU</label><input type="date" name="Tgl_IB_Lalu" class="input-standar"></div>
+                                <div class="grup-input"><label>TANGGAL IB LALU</label><input type="date" name="Tgl_IB_Lalu" class="input-standar"></div>
                                 <div class="grup-input"><label>PELAPOR IB</label><input type="text" name="Pelapor_IB_Lalu" class="input-standar" placeholder="Nama petugas lalu"></div>
                             </div>
                         </div>
@@ -500,11 +501,11 @@
                                     <select name="IB_Ke" class="input-standar"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4+">4 atau Lebih</option></select>
                                 </div>
                                 <div class="grup-input">
-                                    <label>PEJANTAN</label>
+                                    <label>B. PEJANTAN STRAW</label>
                                     <select name="Bangsa_Pejantan" id="input-pejantan" class="input-standar"></select>
                                 </div>
                                 <div class="grup-input"><label>ID PEJANTAN</label><input type="text" name="ID_Pejantan" class="input-standar uppercase"></div>
-                                <div class="grup-input"><label>KODE STRAW</label><input type="text" name="ID_Pembuatan" class="input-standar uppercase"></div>
+                                <div class="grup-input"><label>KODE PEMBUATAN</label><input type="text" name="ID_Pembuatan" class="input-standar uppercase"></div>
                             </div>
                         </div>
 
@@ -512,7 +513,7 @@
                             <label><i class="fas fa-stethoscope mr-2 text-emerald-600"></i>Diagnosa Hasil PKB</label>
                             <div class="grid-2-kolom">
                                 <div class="grup-input">
-                                    <label>HASIL</label>
+                                    <label>STATUS HASIL</label>
                                     <select name="Hasil_PKB" class="input-standar"><option value="Bunting">Bunting (+)</option><option value="Tidak Bunting">Tidak Bunting (-)</option></select>
                                 </div>
                                 <div class="grup-input"><label>USIA BUNTING</label><input type="text" name="Usia_Kebuntingan" class="input-standar" placeholder="Contoh: 3 Bulan"></div>
@@ -522,7 +523,7 @@
                         <div id="fields-kelahiran" class="hidden kartu-form tema-lahir">
                             <label><i class="fas fa-baby mr-2 text-pink-600"></i>Pencatatan Data Kelahiran</label>
                             <div class="grid-2-kolom">
-                                <div class="grup-input"><label>NAMA ANAK</label><input type="text" name="Nama_Pedet" class="input-standar"></div>
+                                <div class="grup-input"><label>NAMA ANAK (PEDET)</label><input type="text" name="Nama_Pedet" class="input-standar"></div>
                                 <div class="grup-input">
                                     <label>STATUS LAHIR</label>
                                     <select name="Status_Lahir" class="input-standar"><option value="Hidup Normal Jantan">Hidup Jantan</option><option value="Hidup Normal Betina">Hidup Betina</option><option value="Mati">Mati</option><option value="Kembar">Kembar</option></select>
@@ -538,7 +539,7 @@
                 </div>
             </section>
 
-            <!-- DATA / FILTER (DIKEMBALIKAN UTUH & RAPI 100%) -->
+            <!-- DATA / FILTER (DIKEMBALIKAN UTUH RAPI 100%) -->
             <section id="view-data" class="view-section hidden fade-in pb-4">
                 <div class="flex justify-between items-end mb-4">
                     <div><h2 class="text-3xl font-black text-gradient font-outfit">Sistem Data</h2></div>
@@ -559,7 +560,7 @@
                     </button>
                 </div>
 
-                <!-- FILTER DATA (LENGKAP & TIDAK HILANG) -->
+                <!-- FILTER DATA (100% LENGKAP & RAPI) -->
                 <div class="glass-card p-4 mb-4 border-t-4 border-emerald-500 shadow-sm">
                     <div class="flex justify-between items-center mb-3">
                         <label class="text-[10px] font-black text-slate-700 uppercase tracking-widest"><i class="fas fa-filter mr-2"></i>Pencarian & Filter</label>
@@ -579,15 +580,6 @@
                             <input type="date" id="filter-tanggal" class="text-xs" onchange="renderDataList()">
                         </div>
                         <div class="input-float">
-                            <label>KECAMATAN</label>
-                            <select id="filter-kecamatan" class="text-xs" onchange="renderDataList()">
-                                <option value="Semua">Semua Kecamatan</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-3 mb-3">
-                        <div class="input-float">
                             <label>BULAN</label>
                             <select id="filter-bulan" class="text-xs" onchange="renderDataList()">
                                 <option value="Semua">Semua Bulan</option>
@@ -605,12 +597,30 @@
                                 <option value="12">Desember</option>
                             </select>
                         </div>
-                        <div class="input-float">
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-3 mb-3">
+                        <div class="input-float col-span-1">
                             <label>TAHUN</label>
                             <select id="filter-tahun" class="text-xs" onchange="renderDataList()">
-                                <option value="Semua">Semua Tahun</option>
+                                <option value="Semua">Semua</option>
                                 <option value="2026">2026</option>
                                 <option value="2025">2025</option>
+                            </select>
+                        </div>
+                        <div class="input-float col-span-2">
+                            <label>KECAMATAN</label>
+                            <select id="filter-kecamatan" class="text-xs" onchange="updateDesaFilter()">
+                                <option value="Semua">Semua Kecamatan</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-3">
+                        <div class="input-float">
+                            <label>DESA / KELURAHAN (BONUS)</label>
+                            <select id="filter-desa" class="text-xs" onchange="renderDataList()">
+                                <option value="Semua">Semua Desa</option>
                             </select>
                         </div>
                     </div>
@@ -657,15 +667,12 @@
                         <div class="mt-6 hidden" id="btn-save-profile-container"><button type="submit" id="btn-save-profile" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-xl text-xs tracking-widest shadow-md transition active:scale-95"><i class="fas fa-save mr-1"></i> SIMPAN PERBAIKAN</button></div>
                     </form>
 
-                    <div class="mt-6 border-t border-emerald-100 pt-4 relative z-10">
-                        <button type="button" onclick="showIdCard()" class="w-full bg-slate-800 text-white font-black py-4 rounded-xl text-[11px] tracking-widest shadow-md mb-2 font-outfit active:scale-95 transition flex items-center justify-center">
-                            <i class="fas fa-id-badge mr-2 text-emerald-400 text-lg"></i> TAMPILKAN ID CARD VIRTUAL
-                        </button>
-                    </div>
+                    <div class="mt-6 border-t border-emerald-100 pt-4 relative z-10"><button type="button" onclick="showIdCard()" class="w-full bg-slate-800 text-white font-black py-4 rounded-xl text-[11px] tracking-widest shadow-md mb-2 font-outfit active:scale-95 transition flex items-center justify-center"><i class="fas fa-id-badge mr-2 text-emerald-400 text-lg"></i> TAMPILKAN ID CARD VIRTUAL</button></div>
                     
                     <div id="admin-tools" class="hidden mt-2 pt-2 border-t border-emerald-100 relative z-10 space-y-2">
                         <button type="button" onclick="switchView('users')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-bold px-4 py-4 rounded-xl tracking-widest font-outfit shadow-md transition active:scale-95"><i class="fas fa-users-gear mr-2"></i> KELOLA PENGGUNA (ADMIN)</button>
                         
+                        <!-- TOMBOL UPLOAD FOTO SLIDER (KHUSUS ADMIN) -->
                         <div class="grid grid-cols-1 gap-2 mt-2">
                             <button type="button" onclick="document.getElementById('upload-banner-file').click()" class="w-full bg-sky-600 hover:bg-sky-700 text-white text-[9px] font-bold px-3 py-3 rounded-xl tracking-widest shadow-md transition active:scale-95">
                                 <i class="fas fa-images mr-1"></i> UPLOAD FOTO BANNER DASHBOARD
@@ -847,7 +854,7 @@
     function openMapModal() { 
         document.getElementById('peta-modal').classList.remove('hidden'); document.getElementById('peta-modal').classList.add('flex'); 
         setTimeout(() => { 
-            if(!map) { map = L.map('map-container').setView([-10.1706, 123.5828], 10); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map); } 
+            if(!map) { map = L.map('map-container').setView([-10.1706, 123.5828], 10); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: 'Â© OpenStreetMap' }).addTo(map); } 
             map.invalidateSize(); plotMarkers(); 
         }, 300); 
     }
@@ -916,6 +923,7 @@
         }); 
         
         updateDesaSelect('input-kecamatan', 'input-lokasi'); 
+        updateDesaFilter();
     }
     
     function updateDesaSelect(idKec, idDesa) { 
@@ -928,6 +936,20 @@
                 selDesa.innerHTML += `<option value="${desa}">${desa}</option>`; 
             }); 
         } 
+    }
+
+    // BONUS PERBAIKAN: Fungsi Update Filter Desa
+    function updateDesaFilter() {
+        const kec = document.getElementById('filter-kecamatan').value;
+        const selDesa = document.getElementById('filter-desa');
+        if(!selDesa) return;
+        selDesa.innerHTML = '<option value="Semua">Semua Desa</option>';
+        if(kec !== 'Semua' && dataWilayahKupang[kec]) {
+            dataWilayahKupang[kec].sort().forEach(desa => {
+                selDesa.innerHTML += `<option value="${desa}">${desa}</option>`;
+            });
+        }
+        renderDataList();
     }
 
     // DATABASE LOKAL & MASTER ADMIN
@@ -1025,28 +1047,57 @@
         updateBangsaList('input-pejantan', listSapi); updateBangsaInduk(); generateAvatarSelectors(); initWilayah(); fetchCloudData();
     }
 
-    // LOGIN
+    // LOGIN & CLOUD FETCH (DIKEMBALIKAN UTUH AGAR TIDAK ERROR 4)
     async function handleLogin(e) {
         e.preventDefault(); 
-        const u = document.getElementById('login-username').value.trim(); const p = document.getElementById('login-password').value.trim(); 
-        const btn = document.getElementById('btn-login'); btn.innerText = "MEMERIKSA..."; btn.disabled = true;
+        const u = document.getElementById('login-username').value.trim(); 
+        const p = document.getElementById('login-password').value.trim(); 
+        const btn = document.getElementById('btn-login'); 
+        btn.innerText = "MEMERIKSA DATABASE..."; btn.disabled = true;
 
         if (IS_OFFLINE) {
             setTimeout(() => {
                 let foundUser = usersList.find(user => user.username.toLowerCase() === u.toLowerCase());
-                if (!foundUser || foundUser.password !== p) { showToast('Username atau Kata Sandi salah!', true); btn.innerHTML = 'MASUK SISTEM <i class="fas fa-arrow-right ml-2 text-xs"></i>'; btn.disabled = false; return; }
+                if (!foundUser || foundUser.password !== p) { 
+                    showToast('Username atau Kata Sandi salah!', true); 
+                    btn.innerHTML = 'MASUK SISTEM <i class="fas fa-arrow-right ml-2 text-xs"></i>'; btn.disabled = false; return; 
+                }
                 currentUser = { ...foundUser }; if(!currentUser.avatar) currentUser.avatar = 'Felix'; 
                 sessionStorage.setItem('simpro_pro_session', JSON.stringify(currentUser)); 
                 startAppFlow(); showToast('Akses Diberikan!'); playJarvisVoice("Akses diterima. Selamat bertugas, " + currentUser.name.split(' ')[0]); 
                 btn.innerHTML = 'MASUK SISTEM <i class="fas fa-arrow-right ml-2 text-xs"></i>'; btn.disabled = false;
-            }, 800); return;
+            }, 800); 
+            return;
         }
+
+        // FUNGSI ONLINE LOGIN
+        const payload = createPayload({ action: 'login', username: u, password: p });
+        try {
+            let response = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, redirect: "follow" });
+            let json = await response.json();
+            if(json.result === 'success') { 
+                currentUser = json.user; sessionStorage.setItem('simpro_pro_session', JSON.stringify(currentUser)); 
+                startAppFlow(); showToast('Akses Diberikan!'); playJarvisVoice("Akses diterima."); 
+            } else { 
+                showToast(json.message || 'Salah!', true); 
+            }
+        } catch(err) { 
+            showToast('Gagal terhubung Server.', true); 
+        }
+        btn.innerHTML = 'MASUK SISTEM <i class="fas fa-arrow-right ml-2 text-xs"></i>'; btn.disabled = false;
     }
 
     async function fetchCloudData() {
         if (IS_OFFLINE) { loadOfflineDB(); if (currentUser) { updateDashboard(); updateSyncBadge(); if(currentUser.role === 'admin') { renderUserManagement(); renderInbox(); updateInboxBadge(); } } return; }
         if(!GOOGLE_SHEETS_URL || GOOGLE_SHEETS_URL.includes("ISI_DENGAN_URL")) return;
-        try { let res = await fetch(`${GOOGLE_SHEETS_URL}?action=getAllData&t=${new Date().getTime()}`, { method: "GET", redirect: "follow" }); let json = await res.json(); if(json && json.result === 'success') { reports = json.reports || []; usersList = json.users || []; inboxList = json.inbox || []; if (currentUser) { updateDashboard(); if(currentUser.role === 'admin') { renderUserManagement(); renderInbox(); updateInboxBadge(); } } } } catch(e) { console.log("Gagal", e); }
+        try { 
+            let res = await fetch(`${GOOGLE_SHEETS_URL}?action=getAllData&t=${new Date().getTime()}`, { method: "GET", redirect: "follow" }); 
+            let json = await res.json(); 
+            if(json && json.result === 'success') { 
+                reports = json.reports || []; usersList = json.users || []; inboxList = json.inbox || []; 
+                if (currentUser) { updateDashboard(); if(currentUser.role === 'admin') { renderUserManagement(); renderInbox(); updateInboxBadge(); } } 
+            } 
+        } catch(e) { console.log("Gagal", e); }
     }
 
     // PENGINGAT PETUGAS
@@ -1088,6 +1139,7 @@
         });
     }
 
+    // HTMX PREPARE DATA
     function prepareHtmxData(evt) {
         document.getElementById('htmx-id-sistem').value = 'SIMPRO-' + Date.now().toString().slice(-5); document.getElementById('htmx-waktu').value = new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'}); document.getElementById('htmx-petugas-name').value = currentUser.name; document.getElementById('htmx-petugas-user').value = currentUser.username;
         if (IS_OFFLINE) {
@@ -1123,7 +1175,11 @@
     async function saveProfileChanges(e) {
         e.preventDefault(); const btn = document.getElementById('btn-save-profile'); btn.innerText = "MENYIMPAN..."; btn.disabled = true;
         const newName = document.getElementById('edit-name').value.trim(); const newEmail = document.getElementById('edit-email').value.trim(); const newWA = document.getElementById('edit-wa').value.trim(); const newPass = document.getElementById('edit-password').value.trim(); const newAvatar = currentUser._tempAvatar || currentUser.avatar;
+        
         if (IS_OFFLINE) { setTimeout(() => { showToast("Profil diperbarui!"); currentUser.name = newName; currentUser.email = newEmail; currentUser.whatsapp = newWA; currentUser.avatar = newAvatar; if(newPass) currentUser.password = newPass; delete currentUser._tempAvatar; sessionStorage.setItem('simpro_pro_session', JSON.stringify(currentUser)); let idx = usersList.findIndex(u => u.username.toLowerCase() === currentUser.username.toLowerCase()); if(idx > -1) { usersList[idx].name = newName; usersList[idx].email = newEmail; usersList[idx].whatsapp = newWA; usersList[idx].avatar = newAvatar; if(newPass) usersList[idx].password = newPass; } saveOfflineDB(); document.getElementById('dash-name').innerText = currentUser.name; updateAvatarDisplay(currentUser.avatar, 'header-avatar', 'header-avatar-fallback'); isEditingProfile = false; toggleEditProfileUI(); loadProfileData(); btn.innerHTML = '<i class="fas fa-save mr-1"></i> SIMPAN PERBAIKAN'; btn.disabled = false; }, 800); return; }
+
+        const payload = createPayload({ action: 'updateProfile', username: currentUser.username, name: newName, email: newEmail, whatsapp: newWA, password: newPass, avatar: newAvatar });
+        try { let res = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, redirect: "follow" }); let json = await res.json(); if(json.result === 'success') { showToast("Profil diperbarui!"); currentUser.name = newName; currentUser.email = newEmail; currentUser.whatsapp = newWA; currentUser.avatar = newAvatar; if(newPass) currentUser.password = newPass; delete currentUser._tempAvatar; sessionStorage.setItem('simpro_pro_session', JSON.stringify(currentUser)); document.getElementById('dash-name').innerText = currentUser.name; updateAvatarDisplay(currentUser.avatar, 'header-avatar', 'header-avatar-fallback'); isEditingProfile = false; toggleEditProfileUI(); loadProfileData(); fetchCloudData(); } else { showToast(json.message || "Gagal", true); } } catch(err) { showToast("Gagal terhubung", true); } finally { btn.innerHTML = '<i class="fas fa-save mr-1"></i> SIMPAN PERBAIKAN'; btn.disabled = false; }
     }
 
     function renderUserManagement() {
@@ -1142,9 +1198,18 @@
     async function submitAdminEditUser(e) {
         e.preventDefault(); const oldUser = document.getElementById('admin-edit-old-username').value; const newName = document.getElementById('admin-edit-name').value; const newRole = document.getElementById('admin-edit-role').value; const newEmail = document.getElementById('admin-edit-email').value; const newWa = document.getElementById('admin-edit-wa').value; const newPass = document.getElementById('admin-edit-password').value;
         if (IS_OFFLINE) { let idx = usersList.findIndex(x => x.username === oldUser); if(idx > -1) { usersList[idx].name = newName; usersList[idx].role = newRole; usersList[idx].email = newEmail; usersList[idx].whatsapp = newWa; if(newPass) usersList[idx].password = newPass; saveOfflineDB(); showToast(`Data diperbarui!`); renderUserManagement(); } closeAdminEditModal(); return; }
+        // Online
+        const payload = createPayload({ action: 'adminEditUser', oldUsername: oldUser, name: newName, role: newRole, email: newEmail, whatsapp: newWa, password: newPass });
+        try { let res = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, redirect: "follow" }); let json = await res.json(); if(json.result === 'success') { showToast(`User diperbarui.`); fetchCloudData(); closeAdminEditModal(); } else { showToast(json.message, true); } } catch(err) { showToast('Gagal terhubung', true); }
     }
 
-    async function adminDeleteUser(targetUsername) { if(!confirm(`PERINGATAN: Yakin ingin menghapus permanen akun petugas @${targetUsername}?`)) return; if(IS_OFFLINE) { usersList = usersList.filter(u => u.username !== targetUsername); saveOfflineDB(); showToast(`Akun dihapus.`); renderUserManagement(); return; } }
+    async function adminDeleteUser(targetUsername) { 
+        if(!confirm(`PERINGATAN: Yakin ingin menghapus permanen akun petugas @${targetUsername}?`)) return; 
+        if(IS_OFFLINE) { usersList = usersList.filter(u => u.username !== targetUsername); saveOfflineDB(); showToast(`Akun dihapus.`); renderUserManagement(); return; } 
+        // Online
+        const payload = createPayload({ action: 'deleteUser', targetUsername: targetUsername });
+        try { let res = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, redirect: "follow" }); let json = await res.json(); if(json.result === 'success') { showToast(`Akun dihapus.`); fetchCloudData(); } else { showToast(json.message, true); } } catch(err) { showToast('Gagal terhubung', true); }
+    }
 
     function renderInbox() {
         const badge = document.getElementById('inbox-badge'); const c = document.getElementById('inbox-container'); if(!c) return; c.innerHTML = '';
@@ -1156,8 +1221,23 @@
         });
     }
 
-    async function adminResolveMessage(idMsg) { if(IS_OFFLINE) { let msg = inboxList.find(x => x.id === idMsg); if(msg) msg.status = 'Telah Diselesaikan'; saveOfflineDB(); showToast(`Pesan diselesaikan.`); renderInbox(); updateInboxBadge(); return; } }
-    async function adminResetPasswordAndReply(targetUsername, waNumber, emailTarget) { const newPass = prompt(`Masukkan Kata Sandi Baru untuk pengguna @${targetUsername}:`); if(!newPass) return; if(IS_OFFLINE) { let u = usersList.find(x => x.username === targetUsername); if(u) u.password = newPass; saveOfflineDB(); showToast(`Sandi @${targetUsername} diubah!`); return; } }
+    async function adminResolveMessage(idMsg) { 
+        if(IS_OFFLINE) { let msg = inboxList.find(x => x.id === idMsg); if(msg) msg.status = 'Telah Diselesaikan'; saveOfflineDB(); showToast(`Pesan diselesaikan.`); renderInbox(); updateInboxBadge(); return; } 
+        // Online
+        const payload = createPayload({ action: 'resolveMessage', idMsg: idMsg });
+        try { let res = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, redirect: "follow" }); let json = await res.json(); if(json.result === 'success') { showToast(`Diselesaikan.`); fetchCloudData(); } } catch(err) { showToast('Gagal terhubung', true); }
+    }
+
+    async function adminResetPasswordAndReply(targetUsername, waNumber, emailTarget) { 
+        const newPass = prompt(`Masukkan Kata Sandi Baru untuk pengguna @${targetUsername}:`); if(!newPass) return; 
+        if(IS_OFFLINE) { let u = usersList.find(x => x.username === targetUsername); if(u) u.password = newPass; saveOfflineDB(); showToast(`Sandi @${targetUsername} diubah!`); return; } 
+        // Online
+        const payload = createPayload({ action: 'adminResetPassword', targetUsername: targetUsername, newPassword: newPass });
+        try {
+            let res = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, redirect: "follow" }); let json = await res.json();
+            if(json.result === 'success') { showToast(`Sandi diubah!`); let text = `Halo, Admin SIMPRO.\nSandi akun Anda (@${targetUsername}) telah direset.\n*Sandi Baru:* ${newPass}`; if(waNumber && waNumber.length > 5) { window.open(`https://wa.me/${waNumber.replace(/^0/,'62')}?text=${encodeURIComponent(text)}`, '_blank'); } else if(emailTarget && emailTarget.includes('@')) { window.open(`mailto:${emailTarget}?subject=Sandi%20Baru&body=${encodeURIComponent(text)}`, '_blank'); } } else { showToast(json.message, true); }
+        } catch(e) { showToast("Gagal terhubung", true); }
+    }
 
     async function handleRegister(e) {
         e.preventDefault(); const btn = document.getElementById('btn-reg'); btn.innerText = "MENYIMPAN DATA..."; btn.disabled = true;
@@ -1169,6 +1249,9 @@
                 saveOfflineDB(); showToast('Registrasi Berhasil! Silakan Login.'); e.target.reset(); hideRegister(); btn.innerText = "DAFTARKAN AKUN"; btn.disabled = false; 
             }, 800); return;
         }
+        // Online
+        const payload = createPayload({ action: 'register', name: document.getElementById('reg-name').value, email: document.getElementById('reg-email').value, whatsapp: document.getElementById('reg-whatsapp').value, nik: document.getElementById('reg-nik').value, username: document.getElementById('reg-username').value.trim(), password: document.getElementById('reg-password').value, role: 'petugas', avatar: 'Felix' });
+        try { let res = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, redirect: "follow" }); let json = await res.json(); if(json.result === 'success') { showToast('Berhasil! Silakan Login.'); e.target.reset(); hideRegister(); fetchCloudData(); } else { showToast(json.message || 'Gagal mendaftar.', true); } } catch(err) { showToast('Gagal terhubung.', true); } btn.innerText = "DAFTARKAN AKUN"; btn.disabled = false;
     }
 
     async function submitForgotPassword() {
@@ -1181,6 +1264,9 @@
                 saveOfflineDB(); showToast("Pesan dikirim ke Admin."); closeForgotPassword(); btn.innerText = "KIRIM PESAN KE ADMIN"; btn.disabled = false; if(currentUser && currentUser.role === 'admin') { updateInboxBadge(); renderInbox(); }
             }, 800); return;
         }
+        // Online
+        const payload = createPayload({ action: 'forgotPasswordRequest', identifier: identifier, message: message });
+        try { let res = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, redirect: "follow" }); let json = await res.json(); if(json.result === 'success') { showToast("Pesan dikirim."); closeForgotPassword(); } else { showToast(json.message, true); } } catch(e) { showToast("Gagal terhubung.", true); } btn.innerText = "KIRIM PESAN KE ADMIN"; btn.disabled = false;
     }
 
     function showToast(msg, err = false) { const t = document.getElementById('toast'); document.getElementById('toast-msg').innerText = msg; document.getElementById('toast-icon').className = err ? "fas fa-skull text-pink-600 mr-3 text-xl" : "fas fa-check-circle text-emerald-500 mr-3 text-xl"; t.classList.remove('-translate-y-40', 'opacity-0'); t.classList.add('translate-y-0', 'opacity-100'); setTimeout(() => { t.classList.remove('translate-y-0', 'opacity-100'); t.classList.add('-translate-y-40', 'opacity-0'); }, 3000); }
@@ -1188,11 +1274,7 @@
 
     function startAppFlow() {
         document.getElementById('dash-name').innerText = currentUser.name; document.getElementById('dash-role').innerText = currentUser.role.toUpperCase(); updateAvatarDisplay(currentUser.avatar || 'Felix', 'header-avatar', 'header-avatar-fallback');
-        if(currentUser.role === 'admin') { 
-            document.getElementById('admin-tools').classList.remove('hidden'); const inboxBtn = document.getElementById('btn-inbox-header'); inboxBtn.classList.remove('hidden'); inboxBtn.classList.add('flex'); updateInboxBadge();
-        } else {
-            document.getElementById('admin-tools').classList.add('hidden'); const inboxBtn = document.getElementById('btn-inbox-header'); inboxBtn.classList.add('hidden'); inboxBtn.classList.remove('flex');
-        }
+        if(currentUser.role === 'admin') { document.getElementById('admin-tools').classList.remove('hidden'); const inboxBtn = document.getElementById('btn-inbox-header'); inboxBtn.classList.remove('hidden'); inboxBtn.classList.add('flex'); updateInboxBadge(); } else { document.getElementById('admin-tools').classList.add('hidden'); const inboxBtn = document.getElementById('btn-inbox-header'); inboxBtn.classList.add('hidden'); inboxBtn.classList.remove('flex'); }
         
         const micBtn = document.getElementById('mic-btn'); if(micBtn) micBtn.classList.remove('hidden');
         
@@ -1218,6 +1300,7 @@
     function getGPSLocation() { const st = document.getElementById('gps-status'); st.innerHTML = 'Melacak...'; if (navigator.geolocation) { navigator.geolocation.getCurrentPosition( pos => { const coords = `${pos.coords.latitude.toFixed(5)}, ${pos.coords.longitude.toFixed(5)}`; document.getElementById('input-gps-tampil').value = coords; document.getElementById('input-gps-hidden').value = coords; st.innerHTML='Akurasi GPS didapatkan'; }, err => { st.innerHTML='GPS tidak aktif. Nyalakan Lokasi HP.'; }, { enableHighAccuracy: true, timeout: 10000 }); } }
     function handleLaporanFotoUpload(event, previewId, fallbackId, inputDataId) { const file = event.target.files[0]; if(!file) return; compressImageToBase64(file, 400, function(dataUrl) { document.getElementById(previewId).src = dataUrl; document.getElementById(previewId).classList.remove('hidden'); document.getElementById(fallbackId).classList.add('hidden'); document.getElementById(inputDataId).value = dataUrl; showToast('Foto dilampirkan!'); }); }
 
+    // --- FILTER SISTEM DATA LENGKAP (KECAMATAN & DESA/KELURAHAN) ---
     function setLayananFilter(type) { 
         activeLayananFilter = type; 
         document.querySelectorAll('.layanan-tab').forEach(el => el.className = "layanan-tab flex flex-col items-center justify-center py-4 rounded-xl border-2 border-transparent bg-white text-slate-500 shadow-md transition"); 
@@ -1230,24 +1313,26 @@
         document.getElementById('filter-bulan').value = 'Semua'; 
         document.getElementById('filter-tahun').value = 'Semua'; 
         document.getElementById('filter-kecamatan').value = 'Semua'; 
+        document.getElementById('filter-desa').innerHTML = '<option value="Semua">Semua Desa</option>';
         document.getElementById('filter-search').value = ''; 
         setLayananFilter('Semua'); 
     }
 
     function getFilteredReports() {
         let fd = reports; 
-        const fTgl = document.getElementById('filter-tanggal').value; 
-        const fBulan = document.getElementById('filter-bulan').value; 
-        const fTahun = document.getElementById('filter-tahun').value; 
-        const fKecamatan = document.getElementById('filter-kecamatan').value; 
+        const fTgl = document.getElementById('filter-tanggal').value;
+        const fBulan = document.getElementById('filter-bulan').value;
+        const fTahun = document.getElementById('filter-tahun').value;
+        const fKecamatan = document.getElementById('filter-kecamatan').value;
+        const fDesa = document.getElementById('filter-desa').value;
         const fSearch = document.getElementById('filter-search').value.toLowerCase();
         
         return fd.filter(r => {
             if(!r.Tanggal) return false; 
             if(activeLayananFilter !== 'Semua' && r.Layanan !== activeLayananFilter) return false;
             
-            const rDateObj = new Date(r.Tanggal); 
-            const rBulan = String(rDateObj.getMonth() + 1).padStart(2, '0'); 
+            const rDateObj = new Date(r.Tanggal);
+            const rBulan = String(rDateObj.getMonth() + 1).padStart(2, '0');
             const rTahun = String(rDateObj.getFullYear()); 
             let match = true;
             
@@ -1257,6 +1342,8 @@
                 if(fTahun !== 'Semua' && rTahun !== fTahun) match = false; 
             }
             if(fKecamatan !== 'Semua' && r.Kecamatan !== fKecamatan) match = false; 
+            if(fDesa !== 'Semua' && r.Lokasi !== fDesa) match = false; 
+            
             if(fSearch) { 
                 let textToSearch = `${r.ID_Sistem} ${r.Peternak} ${r.ID_Hewan} ${r.ID_Eartag}`.toLowerCase(); 
                 if(!textToSearch.includes(fSearch)) match = false; 
@@ -1291,6 +1378,7 @@
             else if(r.Layanan === 'Kelahiran') detailData = `Status Lahir: ${r.Status_Lahir} | Nama Pedet: ${r.Nama_Pedet}`;
             
             let syncIcon = r.syncStatus === 'pending' ? '<i class="fas fa-clock text-amber-500"></i>' : '<i class="fas fa-check-circle text-emerald-500"></i>';
+            
             html += `<tr onclick="openDetailModal('${r.ID_Sistem}')" class="hover:bg-slate-50 transition cursor-pointer"><td class="px-4 py-3">${idx+1}</td><td class="px-4 py-3 text-center">${syncIcon}</td><td class="px-4 py-3 font-mono">${r.Tanggal} <br><span class="text-[9px] text-slate-400">${r.Waktu}</span></td><td class="px-4 py-3 font-black text-sky-600">${r.Layanan}</td><td class="px-4 py-3 font-bold">${r.Peternak} <br><span class="text-[9px] font-normal text-slate-500"><i class="fas fa-phone mr-1"></i>${r.Kontak}</span></td><td class="px-4 py-3">${r.Kecamatan} <br><span class="text-[9px] text-slate-500">${r.Lokasi}</span></td><td class="px-4 py-3 font-mono text-indigo-700">${r.ID_Hewan} <br><span class="text-[9px] font-bold text-slate-500">${r.Spesies} - ${r.Bangsa_Induk}</span></td><td class="px-4 py-3 text-emerald-700 font-semibold">${detailData}</td><td class="px-4 py-3 text-slate-700">${r.Petugas}</td></tr>`;
         }); 
         html += `</tbody></table></div>`; 
@@ -1300,7 +1388,7 @@
     function openDetailModal(idSistem) {
         const r = reports.find(x => x.ID_Sistem === idSistem); if(!r) return; 
         document.getElementById('modal-title').innerText = `Detail ${r.Layanan}`; 
-        document.getElementById('modal-subtitle').innerText = `Oleh: ${r.Petugas} • ${r.Tanggal} ${r.Waktu}`;
+        document.getElementById('modal-subtitle').innerText = `Oleh: ${r.Petugas} â€¢ ${r.Tanggal} ${r.Waktu}`;
         
         let fotoSection = r.Foto_Dokumentasi && r.Foto_Dokumentasi.length > 50 ? `<div class="mt-4 text-center"><p class="text-[9px] text-amber-600 font-bold uppercase mb-2">Foto Dokumentasi</p><img src="${r.Foto_Dokumentasi}" class="w-full h-48 object-cover rounded-xl border shadow-sm"></div>` : ''; 
         let detailKhusus = "";
@@ -1312,9 +1400,9 @@
         let html = `<div class="overflow-hidden rounded-xl border bg-white/70 shadow-sm p-4 space-y-2 text-xs"><p class="border-b pb-2 mb-2"><b>ID Laporan:</b> <span class="font-mono text-sky-700">${r.ID_Sistem}</span></p><div class="grid grid-cols-2 gap-2"><p><b>Peternak:</b> ${r.Peternak}</p><p><b>Kontak:</b> ${r.Kontak}</p><p><b>Kecamatan:</b> ${r.Kecamatan || '-'}</p><p><b>Desa:</b> ${r.Lokasi}</p><p><b>Spesies Hewan:</b> ${r.Spesies}</p><p><b>Bangsa Induk:</b> ${r.Bangsa_Induk}</p><p><b>ID Hewan:</b> ${r.ID_Hewan}</p><p><b>No Eartag:</b> ${r.ID_Eartag}</p></div><p class="pt-2"><b>GPS Koordinat:</b> <a href="https://maps.google.com/?q=${r.GPS}" target="_blank" class="text-blue-600 font-semibold hover:underline"><i class="fas fa-map-marker-alt mr-1"></i> Buka di Maps (${r.GPS})</a></p><div class="mt-3 pt-3 border-t border-slate-200"><p class="font-black text-sky-800 mb-3 text-sm">Rincian Penanganan Khusus (${r.Layanan})</p>${detailKhusus}</div></div>${fotoSection}`;
         
         document.getElementById('modal-content').innerHTML = html; 
-        const mod = document.getElementById('detail-modal'); mod.classList.remove('hidden'); mod.classList.add('flex');
+        const mod = document.getElementById('detail-modal'); 
+        mod.classList.remove('hidden'); mod.classList.add('flex');
     }
-    
     function closeDetailModal() { const mod = document.getElementById('detail-modal'); mod.classList.add('hidden'); mod.classList.remove('flex'); }
     
     function exportToExcel() {
