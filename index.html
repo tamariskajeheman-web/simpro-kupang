@@ -113,7 +113,6 @@
          ========================================= -->
     <div id="login-screen" class="fixed inset-0 flex-col items-center justify-center z-[100] px-6 backdrop-blur-md overflow-y-auto py-6 bg-slate-50/50 flex">
         <div class="glass-panel p-8 w-full max-w-md text-center fade-in relative my-auto overflow-hidden">
-            <!-- Ikon Sapi Latar Belakang -->
             <i class="fas fa-cow absolute -right-10 -bottom-10 text-emerald-500 opacity-5" style="font-size: 15rem; z-index: 0;"></i>
             
             <div class="relative w-28 h-28 mx-auto mb-5 rounded-full bg-slate-900 flex items-center justify-center floating shadow-xl overflow-hidden border-2 border-emerald-500/50 z-10">
@@ -332,16 +331,13 @@
             <!-- DASHBOARD -->
             <section id="view-dashboard" class="view-section fade-in pb-4">
                 
-                <!-- BANNER DASHBOARD SLIDER (WIDESCREEN) -->
+                <!-- BANNER DASHBOARD SLIDER -->
                 <div class="welcome-banner p-6 mb-6 rounded-3xl shadow-xl relative overflow-hidden group min-h-[220px] flex flex-col justify-end pt-16 border border-emerald-500/20">
-                    
                     <div id="banner-slider" class="absolute inset-0 w-full h-full z-0">
                         <div class="absolute inset-0 bg-gradient-to-br from-emerald-600 to-sky-600"></div>
                         <i class="fas fa-cow absolute -right-6 -bottom-6 text-white opacity-20" style="font-size: 10rem;"></i>
                     </div>
-
                     <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-0 pointer-events-none"></div>
-
                     <button type="button" id="btn-delete-banner" onclick="clearBanners()" class="hidden absolute top-4 right-4 bg-rose-500/80 text-white rounded-full w-8 h-8 z-20 hover:bg-rose-600 transition backdrop-blur-sm"><i class="fas fa-trash text-xs"></i></button>
 
                     <div class="relative z-10">
@@ -393,7 +389,9 @@
             <section id="view-lapor" class="view-section hidden fade-in pb-4">
                 <div class="glass-panel p-6 mb-8 shadow-md">
                     <h2 class="text-2xl font-black mb-4 text-gradient font-outfit">Input Pelaporan</h2>
-                    <form id="form-laporan-utama" hx-post="ISI_DENGAN_URL_WEB_APP_ANDA_YANG_BARU_DISINI" hx-trigger="submit" hx-indicator="#loading-laporan" hx-on:htmx:before-request="prepareHtmxData(event)" hx-on:htmx:after-request="handleHtmxResponse(event)">
+                    
+                    <!-- HTMX FORM - URL AKAN DI-UPDATE OTOMATIS OLEH JS -->
+                    <form id="form-laporan-utama" hx-post="#" hx-trigger="submit" hx-indicator="#loading-laporan" hx-on:htmx:before-request="prepareHtmxData(event)" hx-on:htmx:after-request="handleHtmxResponse(event)">
                         
                         <input type="hidden" name="action" value="submitReport">
                         <input type="hidden" name="ID_Sistem" id="htmx-id-sistem">
@@ -453,7 +451,7 @@
                             <div class="flex gap-2 items-end">
                                 <div class="grup-input flex-1 mb-0">
                                     <label>GPS KOORDINAT</label>
-                                    <input type="text" id="input-gps-tampil" class="input-standar text-xs font-mono text-sky-700 bg-slate-50" placeholder="Opsional (Klik Tombol)" readonly>
+                                    <input type="text" id="input-gps-tampil" class="input-standar text-xs font-mono text-sky-700 bg-slate-50" placeholder="Opsional" readonly>
                                 </div>
                                 <button type="button" onclick="getGPSLocation()" class="bg-sky-100 text-sky-700 border border-sky-300 px-4 rounded-xl text-xs font-bold h-[45px] shadow-sm active:scale-95 transition">
                                     <i class="fas fa-satellite-dish"></i>
@@ -535,7 +533,7 @@
                         <button type="submit" class="tombol-submit w-full bg-gradient-primary text-white font-black py-4 rounded-xl text-sm tracking-widest shadow-lg font-outfit pulse-glow transition active:scale-95">
                             <i class="fas fa-cloud-arrow-up mr-2"></i> UNGGAH KE SERVER GOOGLE
                         </button>
-                        <div id="loading-laporan" class="htmx-indicator"><i class="fas fa-spinner fa-spin mr-2"></i> MENYIMPAN KE DATABASE SERVER...</div>
+                        <div id="loading-laporan" class="htmx-indicator"><i class="fas fa-spinner fa-spin mr-2"></i> MENYIMPAN KE SERVER...</div>
                     </form>
                 </div>
             </section>
@@ -734,6 +732,7 @@
 
     <!-- SCRIPT JAVASCRIPT MASTER FINAL -->
     <script>
+    // --- GANTI URL DI BAWAH INI DENGAN URL GOOGLE SCRIPT ANDA ---
     const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbwAG8Ux9CwOiD_a0xRps6zpkhYhRJKELHiJqnTg4mIZCpANVexQy6j8AUoXlfUXIo0ozQ/exec";
     const IS_OFFLINE = GOOGLE_SHEETS_URL.includes("ISI_DENGAN_URL");
 
@@ -860,7 +859,7 @@
     function closeMapModal() { document.getElementById('peta-modal').classList.add('hidden'); document.getElementById('peta-modal').classList.remove('flex'); }
     function closeDetailModal() { document.getElementById('detail-modal').classList.add('hidden'); document.getElementById('detail-modal').classList.remove('flex'); }
 
-    // --- SETTINGS (TEMA & ANIMASI) ---
+    // --- PENGATURAN (TEMA & ANIMASI) ---
     function initSettings() { 
         let saved = localStorage.getItem('simpro_settings'); 
         if (saved) { let s = JSON.parse(saved); document.getElementById('toggle-dark').checked = s.darkMode; document.getElementById('toggle-anim').checked = s.batterySaver; } 
@@ -946,37 +945,7 @@
         selDesa.innerHTML = '<option value="Semua">Semua Desa</option>';
         if (kec !== 'Semua' && dataWilayahKupang[kec]) {
             dataWilayahKupang[kec].sort().forEach(desa => {
-                selDesa.innerHTML += `<option value="${desa}">${desa}</option>`;
-            });
-        }
-        renderDataList();
-    }
-
-    // --- DATABASE LOKAL & MASTER ADMIN ---
-    function loadOfflineDB() {
-        let db = localStorage.getItem('simpro_db');
-        if (db) { 
-            let parsed = JSON.parse(db); 
-            reports = parsed.reports || []; 
-            usersList = parsed.usersList || []; 
-            inboxList = parsed.inboxList || []; 
-            bannerImages = parsed.bannerImages || []; 
-        } else { 
-            reports = [{ ID_Sistem: "SIMPRO-9999", Tanggal: "2026-10-18", Waktu: "09:00", Petugas: "Arnoldus R. Jeheman, S.Pt", Layanan: "IB", Peternak: "Bapak Budi", Kontak: "0812345", Kecamatan: "Amarasi", Lokasi: "Buraen", Spesies: "Sapi", ID_Hewan: "SP-01", ID_Eartag: "ID-99", Bangsa_Induk: "Sapi Bali", IB_Ke: "1", ID_Pejantan: "LIM-01", ID_Pembuatan: "B-01", Bangsa_Pejantan: "Sapi Limousin", GPS: "-10.23,123.45", syncStatus: 'synced' }]; 
-            usersList = []; inboxList = []; bannerImages = []; 
-        }
-
-        let targetAdminUsername = "Arnol28";
-        let defaultAdmin = { name: "Arnoldus R. Jeheman, S.Pt", username: targetAdminUsername, password: "29Yerusalem", role: "admin", whatsapp: "08123456789", email: "tamariska.jeheman@gmail.com", avatar: "Felix" };
-        let adminIdx = usersList.findIndex(u => u.username.toLowerCase() === targetAdminUsername.toLowerCase());
-        if (adminIdx > -1) { usersList[adminIdx].role = 'admin'; usersList[adminIdx].email = 'tamariska.jeheman@gmail.com'; } 
-        else { usersList.unshift(defaultAdmin); }
-        saveOfflineDB();
-    }
-    
-    function saveOfflineDB() { localStorage.setItem('simpro_db', JSON.stringify({reports, usersList, inboxList, bannerImages})); }
-
-    function backupDatabase() { const db = localStorage.getItem('simpro_db'); if(!db) return showToast("Database kosong!", true); const blob = new Blob([db], {type: "application/json"}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `Backup_SIMPRO_DB_${new Date().toISOString().slice(0,10)}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); showToast("Database diunduh!"); }
+                selDesa.innerHTML += `<option value="${desa}">${desa}</option>`; }); } renderDataList(); }  // --- DATABASE LOKAL & MASTER ADMIN --- function loadOfflineDB() { let db = localStorage.getItem('simpro_db'); if (db) { let parsed = JSON.parse(db); reports = parsed.reports \vert{}\vert{} []; usersList = parsed.usersList \vert{}\vert{} []; inboxList = parsed.inboxList \vert{}\vert{} []; bannerImages = parsed.bannerImages \vert{}\vert{} []; } else { reports = [{ ID_Sistem: "SIMPRO-9999", Tanggal: "2026-10-18", Waktu: "09:00", Petugas: "Arnoldus R. Jeheman, S.Pt", Layanan: "IB", Peternak: "Bapak Budi", Kontak: "0812345", Kecamatan: "Amarasi", Lokasi: "Buraen", Spesies: "Sapi", ID_Hewan: "SP-01", ID_Eartag: "ID-99", Bangsa_Induk: "Sapi Bali", IB_Ke: "1", ID_Pejantan: "LIM-01", ID_Pembuatan: "B-01", Bangsa_Pejantan: "Sapi Limousin", GPS: "-10.23,123.45", syncStatus: 'synced' }]; usersList = []; inboxList = []; bannerImages = []; }  let targetAdminUsername = "Arnol28"; let defaultAdmin = { name: "Arnoldus R. Jeheman, S.Pt", username: targetAdminUsername, password: "29Yerusalem", role: "admin", whatsapp: "08123456789", email: "tamariska.jeheman@gmail.com", avatar: "Felix" }; let adminIdx = usersList.findIndex(u => u.username.toLowerCase() === targetAdminUsername.toLowerCase()); if (adminIdx > -1) { usersList[adminIdx].role = 'admin'; usersList[adminIdx].email = 'tamariska.jeheman@gmail.com'; } else { usersList.unshift(defaultAdmin); } saveOfflineDB(); }  function saveOfflineDB() { localStorage.setItem('simpro_db', JSON.stringify({reports, usersList, inboxList, bannerImages})); }  function backupDatabase() { const db = localStorage.getItem('simpro_db'); if(!db) return showToast("Database kosong!", true); const blob = new Blob([db], {type: "application/json"}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `Backup_SIMPRO_DB_${new Date().toISOString().slice(0,10)}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); showToast("Database diunduh!"); }
     function restoreDatabase(event) { const file = event.target.files[0]; if(!file) return; const reader = new FileReader(); reader.onload = function(e) { try { const content = e.target.result; JSON.parse(content); localStorage.setItem('simpro_db', content); showToast("Database dipulihkan!"); setTimeout(() => location.reload(), 1500); } catch(err) { showToast("File tidak valid!", true); } }; reader.readAsText(file); }
 
     // --- UPLOAD FOTO BANNER DASHBOARD ---
@@ -1017,38 +986,19 @@
         let html = ''; 
         bannerImages.forEach((img, idx) => { 
             let opacity = idx === 0 ? 'opacity-100' : 'opacity-0'; 
-            html += `<img src="${img}" class="banner-slide absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${opacity}">`; 
-        });
-        container.innerHTML = html;
-        
-        if(bannerImages.length > 1) { 
-            currentBannerIndex = 0; 
-            bannerInterval = setInterval(() => { 
-                let slides = document.querySelectorAll('.banner-slide'); if(slides.length === 0) return; 
-                slides[currentBannerIndex].classList.remove('opacity-100'); slides[currentBannerIndex].classList.add('opacity-0'); 
-                currentBannerIndex = (currentBannerIndex + 1) % slides.length; 
-                slides[currentBannerIndex].classList.remove('opacity-0'); slides[currentBannerIndex].classList.add('opacity-100'); 
-            }, 4000); 
-        }
-    }
-
-    // --- SINKRONISASI OFFLINE ---
-    function updateInboxBadge() { const badge = document.getElementById('inbox-badge'); if(!badge) return; let pending = inboxList.filter(x => x.status === 'Belum Diproses').length; if(pending > 0) { badge.innerText = pending; badge.classList.remove('hidden'); badge.classList.add('flex'); } else { badge.classList.add('hidden'); badge.classList.remove('flex'); } }
-    function updateSyncBadge() { const badge = document.getElementById('sync-badge'); if(!badge) return; let pending = reports.filter(x => x.syncStatus === 'pending').length; if(pending > 0) { badge.innerText = pending; badge.classList.remove('hidden'); badge.classList.add('flex'); } else { badge.classList.add('hidden'); badge.classList.remove('flex'); } }
-    
-    function syncPendingData() { 
-        let pendingReps = reports.filter(r => r.syncStatus === 'pending'); 
-        if(pendingReps.length === 0) return showToast("Semua data sudah tersinkronisasi."); 
-        showToast("Mensinkronisasi data..."); const btn = event.currentTarget; btn.querySelector('i').classList.add('fa-spin'); 
-        setTimeout(() => { 
-            reports.forEach(r => { if(r.syncStatus === 'pending') r.syncStatus = 'synced'; }); 
-            saveOfflineDB(); updateSyncBadge(); btn.querySelector('i').classList.remove('fa-spin'); showToast(`${pendingReps.length} Data berhasil diunggah!`); 
+            html += `<img src="${img}" class="banner-slide absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${opacity}">`; }); container.innerHTML = html;  if(bannerImages.length > 1) { currentBannerIndex = 0; bannerInterval = setInterval(() => { let slides = document.querySelectorAll('.banner-slide'); if(slides.length === 0) return; slides[currentBannerIndex].classList.remove('opacity-100'); slides[currentBannerIndex].classList.add('opacity-0'); currentBannerIndex = (currentBannerIndex + 1) \% slides.length; slides[currentBannerIndex].classList.remove('opacity-0'); slides[currentBannerIndex].classList.add('opacity-100'); }, 4000); } }  // --- SINKRONISASI OFFLINE --- function updateInboxBadge() { const badge = document.getElementById('inbox-badge'); if(!badge) return; let pending = inboxList.filter(x => x.status === 'Belum Diproses').length; if(pending > 0) { badge.innerText = pending; badge.classList.remove('hidden'); badge.classList.add('flex'); } else { badge.classList.add('hidden'); badge.classList.remove('flex'); } } function updateSyncBadge() { const badge = document.getElementById('sync-badge'); if(!badge) return; let pending = reports.filter(x => x.syncStatus === 'pending').length; if(pending > 0) { badge.innerText = pending; badge.classList.remove('hidden'); badge.classList.add('flex'); } else { badge.classList.add('hidden'); badge.classList.remove('flex'); } }  function syncPendingData() { let pendingReps = reports.filter(r => r.syncStatus === 'pending'); if(pendingReps.length === 0) return showToast("Semua data sudah tersinkronisasi."); showToast("Mensinkronisasi data..."); const btn = event.currentTarget; btn.querySelector('i').classList.add('fa-spin'); setTimeout(() => { reports.forEach(r => { if(r.syncStatus === 'pending') r.syncStatus = 'synced'; }); saveOfflineDB(); updateSyncBadge(); btn.querySelector('i').classList.remove('fa-spin'); showToast(`${pendingReps.length} Data berhasil diunggah!`); 
         }, 2000); 
     }
 
     window.onload = () => {
         initSettings(); document.getElementById('input-tanggal').valueAsDate = new Date();
         if(IS_OFFLINE) loadOfflineDB();
+        
+        // AUTO-INJECT HTMX URL
+        if(!IS_OFFLINE) {
+            document.getElementById('form-laporan-utama').setAttribute('hx-post', GOOGLE_SHEETS_URL);
+            htmx.process(document.body);
+        }
         
         const session = sessionStorage.getItem('simpro_pro_session');
         if(session) { 
@@ -1059,33 +1009,53 @@
         updateBangsaList('input-pejantan', listSapi); updateBangsaInduk(); generateAvatarSelectors(); initWilayah(); fetchCloudData();
     }
 
-    // --- LOGIN & CLOUD FETCH ---
+    // --- LOGIN ONLINE & ERROR HANDLING ---
     async function handleLogin(e) {
         e.preventDefault(); 
-        const u = document.getElementById('login-username').value.trim(); const p = document.getElementById('login-password').value.trim(); 
-        const btn = document.getElementById('btn-login'); btn.innerText = "MEMERIKSA DATABASE..."; btn.disabled = true;
+        const u = document.getElementById('login-username').value.trim(); 
+        const p = document.getElementById('login-password').value.trim(); 
+        const btn = document.getElementById('btn-login'); 
+        const originalText = btn.innerHTML;
+        
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> MENGHUBUNGKAN...'; 
+        btn.disabled = true;
 
         if (IS_OFFLINE) {
             setTimeout(() => {
                 let foundUser = usersList.find(user => user.username.toLowerCase() === u.toLowerCase());
-                if (!foundUser || foundUser.password !== p) { showToast('Username atau Kata Sandi salah!', true); btn.innerHTML = 'MASUK SISTEM <i class="fas fa-arrow-right ml-2 text-xs"></i>'; btn.disabled = false; return; }
+                if (!foundUser || foundUser.password !== p) { 
+                    showToast('Username atau Kata Sandi salah!', true); 
+                    btn.innerHTML = originalText; btn.disabled = false; return; 
+                }
                 currentUser = { ...foundUser }; if(!currentUser.avatar) currentUser.avatar = 'Felix'; 
                 sessionStorage.setItem('simpro_pro_session', JSON.stringify(currentUser)); 
-                startAppFlow(); showToast('Akses Diberikan!'); playJarvisVoice("Akses diterima. Selamat bertugas, " + currentUser.name.split(' ')[0]); 
-                btn.innerHTML = 'MASUK SISTEM <i class="fas fa-arrow-right ml-2 text-xs"></i>'; btn.disabled = false;
-            }, 800); return;
+                startAppFlow(); showToast('Akses Diberikan!'); playJarvisVoice("Akses diterima."); 
+                btn.innerHTML = originalText; btn.disabled = false;
+            }, 800); 
+            return;
         }
 
-        const payload = createPayload({ action: 'login', username: u, password: p });
         try {
+            const payload = createPayload({ action: 'login', username: u, password: p });
             let response = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, redirect: "follow" });
+            
+            if (!response.ok) throw new Error("Akses Ditolak Server (HTTP " + response.status + ")");
+            
             let json = await response.json();
+            
             if(json.result === 'success') { 
-                currentUser = json.user; sessionStorage.setItem('simpro_pro_session', JSON.stringify(currentUser)); 
+                currentUser = json.user; 
+                sessionStorage.setItem('simpro_pro_session', JSON.stringify(currentUser)); 
                 startAppFlow(); showToast('Akses Diberikan!'); playJarvisVoice("Akses diterima."); 
-            } else { showToast(json.message || 'Salah!', true); }
-        } catch(err) { showToast('Gagal terhubung Server.', true); }
-        btn.innerHTML = 'MASUK SISTEM <i class="fas fa-arrow-right ml-2 text-xs"></i>'; btn.disabled = false;
+            } else { 
+                showToast(json.message || 'Username atau Kata Sandi Salah!', true); 
+            }
+        } catch(err) { 
+            console.error("Fetch Error:", err);
+            alert("KONEKSI SERVER GAGAL DITOLAK GOOGLE!\n\nPastikan:\n1. Anda sedang Online/Ada Sinyal Internet.\n2. URL Google Sheets Anda sudah benar tanpa terpotong.\n3. Saat Deploy Script, bagian 'Siapa yang memiliki akses (Who has access)' WAJIB diset ke 'Anyone' atau 'Siapa Saja'.\n\nPesan Asli: " + err.message);
+            showToast('Gagal terhubung ke Server.', true); 
+        }
+        btn.innerHTML = originalText; btn.disabled = false;
     }
 
     async function fetchCloudData() {
@@ -1100,7 +1070,7 @@
                 saveOfflineDB();
                 if (currentUser) { updateDashboard(); if(currentUser.role === 'admin') { renderUserManagement(); renderInbox(); updateInboxBadge(); } } 
             } 
-        } catch(e) { console.log("Gagal", e); }
+        } catch(e) { console.log("Gagal Fetch Cloud", e); }
     }
 
     // --- PENGINGAT PETUGAS ---
@@ -1138,67 +1108,14 @@
         map.eachLayer((layer) => { if (layer instanceof L.Marker || layer instanceof L.CircleMarker) map.removeLayer(layer); });
         reports.forEach(r => {
             if(r.GPS && r.GPS.includes(',')) {
-                let coords = r.GPS.split(','); if(coords.length === 2) { let lat = parseFloat(coords[0]), lng = parseFloat(coords[1]); if(!isNaN(lat) && !isNaN(lng)) { let color = r.Layanan === 'IB' ? '#0284c7' : (r.Layanan === 'PKB' ? '#10b981' : '#ec4899'); let circle = L.circleMarker([lat, lng], { radius: 6, fillColor: color, color: '#fff', weight: 1, opacity: 1, fillOpacity: 0.8 }).addTo(map); circle.bindPopup(`<b>${r.Layanan}</b><br>${r.Peternak}<br>${r.Spesies} (${r.ID_Hewan})<br><span style="font-size:10px">${r.Tanggal}</span>`); } }
-            }
-        });
-    }
-
-    // --- HTMX (LAPORAN) ---
-    function prepareHtmxData(evt) {
-        document.getElementById('htmx-id-sistem').value = 'SIMPRO-' + Date.now().toString().slice(-5); document.getElementById('htmx-waktu').value = new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'}); document.getElementById('htmx-petugas-name').value = currentUser.name; document.getElementById('htmx-petugas-user').value = currentUser.username;
-        if (IS_OFFLINE) {
-            evt.preventDefault(); const form = evt.target; const btn = form.querySelector('.tombol-submit'); const ind = form.querySelector('.htmx-indicator'); btn.style.display = 'none'; ind.style.display = 'block';
-            setTimeout(() => { const fd = new FormData(form); const newRep = Object.fromEntries(fd.entries()); newRep.syncStatus = 'pending'; reports.unshift(newRep); saveOfflineDB(); showToast('Laporan Disimpan (Menunggu Sync)'); form.reset(); document.getElementById('input-tanggal').valueAsDate = new Date(); document.getElementById('preview-foto-laporan').classList.add('hidden'); document.getElementById('icon-foto-placeholder').classList.remove('hidden'); updateDashboard(); updateSyncBadge(); switchView('data'); btn.style.display = 'block'; ind.style.display = 'none'; }, 1000);
-        }
-    }
-
-    function handleHtmxResponse(evt) { if(IS_OFFLINE) return; evt.detail.shouldSwap = false; try { let json = JSON.parse(evt.detail.xhr.responseText); if(json.result === 'success') { showToast('Laporan Sukses Diunggah!'); evt.target.reset(); document.getElementById('input-tanggal').valueAsDate = new Date(); document.getElementById('preview-foto-laporan').classList.add('hidden'); document.getElementById('icon-foto-placeholder').classList.remove('hidden'); updateDashboard(); switchView('data'); fetchCloudData(); } else { showToast('Gagal: ' + json.message, true); } } catch (e) { showToast('Gagal.', true); } }
-
-    function switchView(id) {
-        try {
-            document.querySelectorAll('.view-section').forEach(e => e.classList.add('hidden')); const target = document.getElementById('view-'+id); if(target) target.classList.remove('hidden');
-            if(id === 'profile') loadProfileData();
-            if(id === 'data') { fetchCloudData(); renderDataList(); }
-            if(id === 'dashboard') { renderPengingat(); setTimeout(() => renderChart(), 100); renderBanners(); updateSyncBadge(); }
-            if(id === 'users' && currentUser && currentUser.role === 'admin') { renderUserManagement(); }
-            if(id === 'inbox' && currentUser && currentUser.role === 'admin') { renderInbox(); updateInboxBadge(); }
-            document.querySelectorAll('.nav-btn').forEach(btn => { if(btn.dataset.target === 'view-'+id) { btn.classList.remove('text-slate-400'); btn.classList.add('text-emerald-600'); } else { btn.classList.remove('text-emerald-600'); btn.classList.add('text-slate-400'); } });
-            window.scrollTo(0,0);
-        } catch(error) { console.error("Gagal menu", error); }
-    }
-
-    // --- PROFIL & AVATAR ---
-    function loadProfileData() { if(!currentUser) return; document.getElementById('edit-name').value = currentUser.name || ''; document.getElementById('edit-username').value = currentUser.username || ''; document.getElementById('edit-email').value = currentUser.email || ''; document.getElementById('edit-wa').value = currentUser.whatsapp || ''; document.getElementById('edit-password').value = ''; updateAvatarDisplay(currentUser.avatar || 'Felix', 'edit-avatar-preview', 'edit-avatar-fallback'); isEditingProfile = false; toggleEditProfileUI(); }
-    function toggleEditProfile() { isEditingProfile = !isEditingProfile; toggleEditProfileUI(); }
-    
-    function toggleEditProfileUI() {
-        const inputs = document.querySelectorAll('.profile-input'); const btnToggle = document.getElementById('btn-edit-toggle');
-        if (isEditingProfile) { inputs.forEach(input => { input.removeAttribute('readonly'); input.classList.remove('bg-slate-50'); }); document.getElementById('avatar-selector').classList.remove('hidden'); document.getElementById('btn-camera-upload').classList.remove('hidden'); document.getElementById('edit-pass-container').classList.remove('hidden'); document.getElementById('btn-save-profile-container').classList.remove('hidden'); btnToggle.classList.add('bg-blue-600', 'text-white'); btnToggle.classList.remove('bg-blue-100', 'text-blue-600'); } 
-        else { inputs.forEach(input => { input.setAttribute('readonly', true); input.classList.add('bg-slate-50'); }); document.getElementById('avatar-selector').classList.add('hidden'); document.getElementById('btn-camera-upload').classList.add('hidden'); document.getElementById('edit-pass-container').classList.add('hidden'); document.getElementById('btn-save-profile-container').classList.add('hidden'); btnToggle.classList.remove('bg-blue-600', 'text-white'); btnToggle.classList.add('bg-blue-100', 'text-blue-600'); }
-    }
-
-    async function saveProfileChanges(e) {
-        e.preventDefault(); const btn = document.getElementById('btn-save-profile'); btn.innerText = "MENYIMPAN..."; btn.disabled = true;
-        const newName = document.getElementById('edit-name').value.trim(); const newEmail = document.getElementById('edit-email').value.trim(); const newWA = document.getElementById('edit-wa').value.trim(); const newPass = document.getElementById('edit-password').value.trim(); const newAvatar = currentUser._tempAvatar || currentUser.avatar;
-        
-        if (IS_OFFLINE) { 
-            setTimeout(() => { showToast("Profil diperbarui!"); currentUser.name = newName; currentUser.email = newEmail; currentUser.whatsapp = newWA; currentUser.avatar = newAvatar; if(newPass) currentUser.password = newPass; delete currentUser._tempAvatar; sessionStorage.setItem('simpro_pro_session', JSON.stringify(currentUser)); let idx = usersList.findIndex(u => u.username.toLowerCase() === currentUser.username.toLowerCase()); if(idx > -1) { usersList[idx].name = newName; usersList[idx].email = newEmail; usersList[idx].whatsapp = newWA; usersList[idx].avatar = newAvatar; if(newPass) usersList[idx].password = newPass; } saveOfflineDB(); document.getElementById('dash-name').innerText = currentUser.name; updateAvatarDisplay(currentUser.avatar, 'header-avatar', 'header-avatar-fallback'); isEditingProfile = false; toggleEditProfileUI(); loadProfileData(); btn.innerHTML = '<i class="fas fa-save mr-1"></i> SIMPAN PERBAIKAN'; btn.disabled = false; }, 800); return; 
-        }
-
-        const payload = createPayload({ action: 'updateProfile', username: currentUser.username, name: newName, email: newEmail, whatsapp: newWA, password: newPass, avatar: newAvatar });
-        try { let res = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, redirect: "follow" }); let json = await res.json(); if(json.result === 'success') { showToast("Profil Tersimpan di Cloud!"); currentUser.name = newName; currentUser.email = newEmail; currentUser.whatsapp = newWA; currentUser.avatar = newAvatar; if(newPass) currentUser.password = newPass; delete currentUser._tempAvatar; sessionStorage.setItem('simpro_pro_session', JSON.stringify(currentUser)); document.getElementById('dash-name').innerText = currentUser.name; updateAvatarDisplay(currentUser.avatar, 'header-avatar', 'header-avatar-fallback'); isEditingProfile = false; toggleEditProfileUI(); loadProfileData(); fetchCloudData(); } else { showToast(json.message || "Gagal", true); } } catch(err) { showToast("Gagal terhubung", true); } finally { btn.innerHTML = '<i class="fas fa-save mr-1"></i> SIMPAN PERBAIKAN'; btn.disabled = false; }
-    }
-
-    function updateAvatarDisplay(avatarData, imgElemId, fallbackElemId) { const imgEl = document.getElementById(imgElemId); const fallbackEl = document.getElementById(fallbackElemId); if(!imgEl || !fallbackEl) return; if(!avatarData) { imgEl.classList.add('hidden'); fallbackEl.classList.remove('hidden'); return; } let srcUrl = avatarData.length > 20 ? avatarData : `https://api.dicebear.com/7.x/avataaars/svg?seed=${avatarData}`; imgEl.src = srcUrl; imgEl.classList.remove('hidden'); fallbackEl.classList.add('hidden'); }
+                let coords = r.GPS.split(','); if(coords.length === 2) { let lat = parseFloat(coords[0]), lng = parseFloat(coords[1]); if(!isNaN(lat) && !isNaN(lng)) { let color = r.Layanan === 'IB' ? '#0284c7' : (r.Layanan === 'PKB' ? '#10b981' : '#ec4899'); let circle = L.circleMarker([lat, lng], { radius: 6, fillColor: color, color: '#fff', weight: 1, opacity: 1, fillOpacity: 0.8 }).addTo(map); circle.bindPopup(`<b>${r.Layanan}</b><br>${r.Peternak}<br>${r.Spesies} (${r.ID_Hewan})<br><span style="font-size:10px">${r.Tanggal}</span>`); } } } }); }  // --- HTMX (LAPORAN) --- function prepareHtmxData(evt) { document.getElementById('htmx-id-sistem').value = 'SIMPRO-' + Date.now().toString().slice(-5); document.getElementById('htmx-waktu').value = new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'}); document.getElementById('htmx-petugas-name').value = currentUser.name; document.getElementById('htmx-petugas-user').value = currentUser.username; if (IS_OFFLINE) { evt.preventDefault(); const form = evt.target; const btn = form.querySelector('.tombol-submit'); const ind = form.querySelector('.htmx-indicator'); btn.style.display = 'none'; ind.style.display = 'block'; setTimeout(() => { const fd = new FormData(form); const newRep = Object.fromEntries(fd.entries()); newRep.syncStatus = 'pending'; reports.unshift(newRep); saveOfflineDB(); showToast('Laporan Disimpan (Menunggu Sync)'); form.reset(); document.getElementById('input-tanggal').valueAsDate = new Date(); document.getElementById('preview-foto-laporan').classList.add('hidden'); document.getElementById('icon-foto-placeholder').classList.remove('hidden'); updateDashboard(); updateSyncBadge(); switchView('data'); btn.style.display = 'block'; ind.style.display = 'none'; }, 1000); } }  function handleHtmxResponse(evt) { if(IS_OFFLINE) return; evt.detail.shouldSwap = false; try { let json = JSON.parse(evt.detail.xhr.responseText); if(json.result === 'success') { showToast('Laporan Sukses Diunggah!'); evt.target.reset(); document.getElementById('input-tanggal').valueAsDate = new Date(); document.getElementById('preview-foto-laporan').classList.add('hidden'); document.getElementById('icon-foto-placeholder').classList.remove('hidden'); updateDashboard(); switchView('data'); fetchCloudData(); } else { showToast('Gagal: ' + json.message, true); } } catch (e) { showToast('Gagal Data Format.', true); } }  function switchView(id) { try { document.querySelectorAll('.view-section').forEach(e => e.classList.add('hidden')); const target = document.getElementById('view-'+id); if(target) target.classList.remove('hidden'); if(id === 'profile') loadProfileData(); if(id === 'data') { fetchCloudData(); renderDataList(); } if(id === 'dashboard') { renderPengingat(); setTimeout(() => renderChart(), 100); renderBanners(); updateSyncBadge(); } if(id === 'users' && currentUser && currentUser.role === 'admin') { renderUserManagement(); } if(id === 'inbox' && currentUser && currentUser.role === 'admin') { renderInbox(); updateInboxBadge(); } document.querySelectorAll('.nav-btn').forEach(btn => { if(btn.dataset.target === 'view-'+id) { btn.classList.remove('text-slate-400'); btn.classList.add('text-emerald-600'); } else { btn.classList.remove('text-emerald-600'); btn.classList.add('text-slate-400'); } }); window.scrollTo(0,0); } catch(error) { console.error("Gagal menu", error); } }  // --- PROFIL & AVATAR --- function loadProfileData() { if(!currentUser) return; document.getElementById('edit-name').value = currentUser.name \vert{}\vert{} ''; document.getElementById('edit-username').value = currentUser.username \vert{}\vert{} ''; document.getElementById('edit-email').value = currentUser.email \vert{}\vert{} ''; document.getElementById('edit-wa').value = currentUser.whatsapp \vert{}\vert{} ''; document.getElementById('edit-password').value = ''; updateAvatarDisplay(currentUser.avatar \vert{}\vert{} 'Felix', 'edit-avatar-preview', 'edit-avatar-fallback'); isEditingProfile = false; toggleEditProfileUI(); } function toggleEditProfile() { isEditingProfile = !isEditingProfile; toggleEditProfileUI(); }  function toggleEditProfileUI() { const inputs = document.querySelectorAll('.profile-input'); const btnToggle = document.getElementById('btn-edit-toggle'); if (isEditingProfile) { inputs.forEach(input => { input.removeAttribute('readonly'); input.classList.remove('bg-slate-50'); }); document.getElementById('avatar-selector').classList.remove('hidden'); document.getElementById('btn-camera-upload').classList.remove('hidden'); document.getElementById('edit-pass-container').classList.remove('hidden'); document.getElementById('btn-save-profile-container').classList.remove('hidden'); btnToggle.classList.add('bg-blue-600', 'text-white'); btnToggle.classList.remove('bg-blue-100', 'text-blue-600'); } else { inputs.forEach(input => { input.setAttribute('readonly', true); input.classList.add('bg-slate-50'); }); document.getElementById('avatar-selector').classList.add('hidden'); document.getElementById('btn-camera-upload').classList.add('hidden'); document.getElementById('edit-pass-container').classList.add('hidden'); document.getElementById('btn-save-profile-container').classList.add('hidden'); btnToggle.classList.remove('bg-blue-600', 'text-white'); btnToggle.classList.add('bg-blue-100', 'text-blue-600'); } }  async function saveProfileChanges(e) { e.preventDefault(); const btn = document.getElementById('btn-save-profile'); btn.innerText = "MENYIMPAN..."; btn.disabled = true; const newName = document.getElementById('edit-name').value.trim(); const newEmail = document.getElementById('edit-email').value.trim(); const newWA = document.getElementById('edit-wa').value.trim(); const newPass = document.getElementById('edit-password').value.trim(); const newAvatar = currentUser._tempAvatar \vert{}\vert{} currentUser.avatar;  if (IS_OFFLINE) { setTimeout(() => { showToast("Profil diperbarui!"); currentUser.name = newName; currentUser.email = newEmail; currentUser.whatsapp = newWA; currentUser.avatar = newAvatar; if(newPass) currentUser.password = newPass; delete currentUser._tempAvatar; sessionStorage.setItem('simpro_pro_session', JSON.stringify(currentUser)); let idx = usersList.findIndex(u => u.username.toLowerCase() === currentUser.username.toLowerCase()); if(idx > -1) { usersList[idx].name = newName; usersList[idx].email = newEmail; usersList[idx].whatsapp = newWA; usersList[idx].avatar = newAvatar; if(newPass) usersList[idx].password = newPass; } saveOfflineDB(); document.getElementById('dash-name').innerText = currentUser.name; updateAvatarDisplay(currentUser.avatar, 'header-avatar', 'header-avatar-fallback'); isEditingProfile = false; toggleEditProfileUI(); loadProfileData(); btn.innerHTML = '<i class="fas fa-save mr-1"></i> SIMPAN PERBAIKAN'; btn.disabled = false; }, 800); return; }  const payload = createPayload({ action: 'updateProfile', username: currentUser.username, name: newName, email: newEmail, whatsapp: newWA, password: newPass, avatar: newAvatar }); try { let res = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, redirect: "follow" }); let json = await res.json(); if(json.result === 'success') { showToast("Profil Tersimpan di Cloud!"); currentUser.name = newName; currentUser.email = newEmail; currentUser.whatsapp = newWA; currentUser.avatar = newAvatar; if(newPass) currentUser.password = newPass; delete currentUser._tempAvatar; sessionStorage.setItem('simpro_pro_session', JSON.stringify(currentUser)); document.getElementById('dash-name').innerText = currentUser.name; updateAvatarDisplay(currentUser.avatar, 'header-avatar', 'header-avatar-fallback'); isEditingProfile = false; toggleEditProfileUI(); loadProfileData(); fetchCloudData(); } else { showToast(json.message \vert{}\vert{} "Gagal", true); } } catch(err) { showToast("Gagal terhubung", true); } finally { btn.innerHTML = '<i class="fas fa-save mr-1"></i> SIMPAN PERBAIKAN'; btn.disabled = false; } }  function updateAvatarDisplay(avatarData, imgElemId, fallbackElemId) { const imgEl = document.getElementById(imgElemId); const fallbackEl = document.getElementById(fallbackElemId); if(!imgEl \vert{}\vert{} !fallbackEl) return; if(!avatarData) { imgEl.classList.add('hidden'); fallbackEl.classList.remove('hidden'); return; } let srcUrl = avatarData.length > 20 ? avatarData : `https://api.dicebear.com/7.x/avataaars/svg?seed=${avatarData}`; imgEl.src = srcUrl; imgEl.classList.remove('hidden'); fallbackEl.classList.add('hidden'); }
     function generateAvatarSelectors() { const container = document.getElementById('avatar-selector'); if(!container) return; container.innerHTML = ''; avatarSeeds.forEach(seed => { container.innerHTML += `<div onclick="selectAvatar('${seed}')" id="av-${seed}" class="w-10 h-10 avatar-opt bg-sky-50 rounded-full flex items-center justify-center text-sky-700 border cursor-pointer hover:bg-sky-200 transition"><i class="fas fa-user text-sm pointer-events-none"></i></div>`; }); }
     function selectAvatar(seed) { if(!isEditingProfile) return; document.querySelectorAll('.avatar-opt').forEach(el => el.classList.remove('selected')); const el = document.getElementById(`av-${seed}`); if(el) el.classList.add('selected'); updateAvatarDisplay(seed, 'edit-avatar-preview', 'edit-avatar-fallback'); if(currentUser) currentUser._tempAvatar = seed; }
     function compressImageToBase64(file, maxSize, callback) { const reader = new FileReader(); reader.onload = function(e) { const img = new Image(); img.onload = function() { const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d'); let w = img.width, h = img.height; if (w > h) { if (w > maxSize) { h *= maxSize / w; w = maxSize; } } else { if (h > maxSize) { w *= maxSize / h; h = maxSize; } } canvas.width = w; canvas.height = h; ctx.drawImage(img, 0, 0, w, h); callback(canvas.toDataURL('image/jpeg', 0.6)); }; img.src = e.target.result; }; reader.readAsDataURL(file); }
     function handleAvatarUpload(event) { const file = event.target.files[0]; if(!file) return; compressImageToBase64(file, 200, function(dataUrl) { document.getElementById('edit-avatar-preview').src = dataUrl; document.getElementById('edit-avatar-preview').classList.remove('hidden'); document.getElementById('edit-avatar-fallback').classList.add('hidden'); if(currentUser) currentUser._tempAvatar = dataUrl; document.querySelectorAll('.avatar-opt').forEach(el => el.classList.remove('selected')); showToast('Foto profil disiapkan!'); }); }
     function togglePassword(i, icon) { const inp = document.getElementById(i); const ic = document.getElementById(icon); if(inp.type==='password'){ inp.type='text'; ic.className='fas fa-eye-slash text-emerald-600'; } else { inp.type='password'; ic.className='fas fa-eye text-slate-400'; } }
     
-    function updateBangsaList(id, list) { const el = document.getElementById(id); el.innerHTML = ''; list.forEach(o => el.innerHTML += `<option value="${o}">${o}</option>`); }
-    function updateBangsaInduk() { const l = document.getElementById('input-spesies').value === 'Sapi' ? listSapi : listBabi; updateBangsaList('input-bangsa-induk', l); updateBangsaList('input-pejantan', l); }
-    function toggleFormFields() { const t = document.getElementById('form-type').value; ['ib', 'pkb', 'kelahiran'].forEach(id => document.getElementById(`fields-${id}`).classList.add('hidden')); if(t==='IB') { document.getElementById('fields-ib').classList.remove('hidden'); document.getElementById('riwayat-ib-sebelumnya').classList.add('hidden'); } else { document.getElementById('riwayat-ib-sebelumnya').classList.remove('hidden'); } if(t==='PKB') document.getElementById('fields-pkb').classList.remove('hidden'); if(t==='Kelahiran') document.getElementById('fields-kelahiran').classList.remove('hidden'); }
+    function updateBangsaList(id, list) { const el = document.getElementById(id); el.innerHTML = ''; list.forEach(o => el.innerHTML += `<option value="${o}">${o}</option>`); } function updateBangsaInduk() { const l = document.getElementById('input-spesies').value === 'Sapi' ? listSapi : listBabi; updateBangsaList('input-bangsa-induk', l); updateBangsaList('input-pejantan', l); } function toggleFormFields() { const t = document.getElementById('form-type').value; ['ib', 'pkb', 'kelahiran'].forEach(id => document.getElementById(`fields-${id}`).classList.add('hidden')); if(t==='IB') { document.getElementById('fields-ib').classList.remove('hidden'); document.getElementById('riwayat-ib-sebelumnya').classList.add('hidden'); } else { document.getElementById('riwayat-ib-sebelumnya').classList.remove('hidden'); } if(t==='PKB') document.getElementById('fields-pkb').classList.remove('hidden'); if(t==='Kelahiran') document.getElementById('fields-kelahiran').classList.remove('hidden'); }
     
     function getGPSLocation() { const st = document.getElementById('gps-status'); st.innerHTML = 'Melacak...'; if (navigator.geolocation) { navigator.geolocation.getCurrentPosition( pos => { const coords = `${pos.coords.latitude.toFixed(5)},${pos.coords.longitude.toFixed(5)}`; document.getElementById('input-gps-tampil').value = coords; document.getElementById('input-gps-hidden').value = coords; st.innerHTML='Akurasi GPS didapatkan'; }, err => { st.innerHTML='GPS tidak aktif. Nyalakan Lokasi HP.'; }, { enableHighAccuracy: true, timeout: 10000 }); } }
     function handleLaporanFotoUpload(event, previewId, fallbackId, inputDataId) { const file = event.target.files[0]; if(!file) return; compressImageToBase64(file, 400, function(dataUrl) { document.getElementById(previewId).src = dataUrl; document.getElementById(previewId).classList.remove('hidden'); document.getElementById(fallbackId).classList.add('hidden'); document.getElementById(inputDataId).value = dataUrl; showToast('Foto dilampirkan!'); }); }
@@ -1290,8 +1207,7 @@
     
     function openDetailModal(idSistem) {
         const r = reports.find(x => x.ID_Sistem === idSistem); if(!r) return; 
-        document.getElementById('modal-title').innerText = `Detail ${r.Layanan}`; 
-        document.getElementById('modal-subtitle').innerText = `Oleh: ${r.Petugas} • ${r.Tanggal}${r.Waktu}`;
+        document.getElementById('modal-title').innerText = `Detail ${r.Layanan}`; document.getElementById('modal-subtitle').innerText = `Oleh: ${r.Petugas} • ${r.Tanggal}${r.Waktu}`;
         
         let fotoSection = r.Foto_Dokumentasi && r.Foto_Dokumentasi.length > 50 ? `<div class="mt-4 text-center"><p class="text-[9px] text-amber-600 font-bold uppercase mb-2">Foto Dokumentasi</p><img src="${r.Foto_Dokumentasi}" class="w-full h-48 object-cover rounded-xl border shadow-sm"></div>` : ''; 
         let detailKhusus = "";
