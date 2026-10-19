@@ -331,13 +331,16 @@
             <!-- DASHBOARD -->
             <section id="view-dashboard" class="view-section fade-in pb-4">
                 
-                <!-- BANNER DASHBOARD SLIDER -->
+                <!-- BANNER DASHBOARD SLIDER (WIDESCREEN) -->
                 <div class="welcome-banner p-6 mb-6 rounded-3xl shadow-xl relative overflow-hidden group min-h-[220px] flex flex-col justify-end pt-16 border border-emerald-500/20">
+                    
                     <div id="banner-slider" class="absolute inset-0 w-full h-full z-0">
                         <div class="absolute inset-0 bg-gradient-to-br from-emerald-600 to-sky-600"></div>
                         <i class="fas fa-cow absolute -right-6 -bottom-6 text-white opacity-20" style="font-size: 10rem;"></i>
                     </div>
+
                     <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-0 pointer-events-none"></div>
+
                     <button type="button" id="btn-delete-banner" onclick="clearBanners()" class="hidden absolute top-4 right-4 bg-rose-500/80 text-white rounded-full w-8 h-8 z-20 hover:bg-rose-600 transition backdrop-blur-sm"><i class="fas fa-trash text-xs"></i></button>
 
                     <div class="relative z-10">
@@ -536,7 +539,7 @@
                 </div>
             </section>
 
-            <!-- DATA / FILTER -->
+            <!-- DATA / FILTER (DIKEMBALIKAN UTUH & RAPI 100%) -->
             <section id="view-data" class="view-section hidden fade-in pb-4">
                 <div class="flex justify-between items-end mb-4">
                     <div><h2 class="text-3xl font-black text-gradient font-outfit">Sistem Data</h2></div>
@@ -731,7 +734,7 @@
     <!-- SCRIPT JAVASCRIPT MASTER FINAL -->
     <script>
     // --- GANTI URL DI BAWAH INI DENGAN URL GOOGLE SCRIPT ANDA ---
-    const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbxVwooZFnB33jPSdMjYgj3rMfC89-kFzoLoa7gARKE73UA0ahyzKGNev2ztrTO0pS2AAg/exec";
+    const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbyNqfU4OpPUS6upjo0xF_98DCUaigp_XPXeaSg6Y_CRIN3PnkmRup9YxFjh6zrhhlNADQ/exec";
     const IS_OFFLINE = GOOGLE_SHEETS_URL.includes("ISI_DENGAN_URL");
 
     if (IS_OFFLINE) { 
@@ -754,7 +757,7 @@
     function createPayload(obj) { 
         const p = new URLSearchParams(); 
         for(const key in obj) { 
-            p.append(key, obj[key] ? obj[key] : ''); 
+            p.append(key, obj[key] || ''); 
         } 
         return p; 
     }
@@ -762,8 +765,7 @@
     // --- KONTROL SUARA J.A.R.V.I.S ---
     function playJarvisVoice(text) {
         if (!('speechSynthesis' in window)) return;
-        let sStr = localStorage.getItem('simpro_settings');
-        let s = sStr ? JSON.parse(sStr) : {"darkMode":false,"batterySaver":false};
+        let s = JSON.parse(localStorage.getItem('simpro_settings') || '{"batterySaver":false}');
         if(s.batterySaver) return; 
         
         window.speechSynthesis.cancel();
@@ -773,8 +775,7 @@
         utterance.rate = 1.0; 
         
         let voices = window.speechSynthesis.getVoices();
-        let aiVoice = voices.find(v => v.lang === 'id-ID' && String(v.name).includes('Male'));
-        if (!aiVoice) aiVoice = voices.find(v => v.lang === 'id-ID');
+        let aiVoice = voices.find(v => v.lang === 'id-ID' && v.name.includes('Male')) || voices.find(v => v.lang === 'id-ID') || voices.find(v => v.name.includes('Google UK English Male'));
         if (aiVoice) utterance.voice = aiVoice;
         window.speechSynthesis.speak(utterance);
     }
@@ -785,7 +786,7 @@
         }; 
     }
 
-    const SpeechRecognition = window.SpeechRecognition ? window.SpeechRecognition : window.webkitSpeechRecognition;
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     let recognition; 
     let isListening = false;
     
@@ -802,7 +803,7 @@
             showToast("J.A.R.V.I.S Mendengarkan..."); 
         };
         recognition.onresult = function(event) { 
-            const command = String(event.results[0][0].transcript).toLowerCase(); 
+            const command = event.results[0][0].transcript.toLowerCase(); 
             showToast('Perintah: "' + command + '"'); 
             processVoiceCommand(command); 
         };
@@ -832,29 +833,26 @@
     }
     
     function processVoiceCommand(cmd) {
-        let safeCmd = String(cmd);
-        if(safeCmd.includes('peta') || safeCmd.includes('sebaran') || safeCmd.includes('map')) { 
+        if(cmd.includes('peta') || cmd.includes('sebaran') || cmd.includes('map')) { 
             switchView('dashboard'); 
             setTimeout(openMapModal, 500); 
         } 
-        else if (safeCmd.includes('lapor') || safeCmd.includes('tambah')) { switchView('lapor'); } 
-        else if (safeCmd.includes('data') || safeCmd.includes('tabel')) { switchView('data'); } 
-        else if (safeCmd.includes('profil') || safeCmd.includes('akun')) { switchView('profile'); } 
-        else if (safeCmd.includes('id card') || safeCmd.includes('kartu') || safeCmd.includes('identitas')) { 
+        else if (cmd.includes('lapor') || cmd.includes('tambah')) { switchView('lapor'); } 
+        else if (cmd.includes('data') || cmd.includes('tabel')) { switchView('data'); } 
+        else if (cmd.includes('profil') || cmd.includes('akun')) { switchView('profile'); } 
+        else if (cmd.includes('id card') || cmd.includes('kartu') || cmd.includes('identitas')) { 
             switchView('profile'); 
             setTimeout(showIdCard, 500); 
         } 
-        else if (safeCmd.includes('pengguna') || safeCmd.includes('user') || safeCmd.includes('admin')) { 
-            let role = currentUser && currentUser.role ? String(currentUser.role).trim().toLowerCase() : '';
-            if(role === 'admin') switchView('users'); 
+        else if (cmd.includes('pengguna') || cmd.includes('user') || cmd.includes('admin')) { 
+            if(currentUser && currentUser.role === 'admin') switchView('users'); 
             else showToast("Akses ditolak.", true); 
         } 
-        else if (safeCmd.includes('pesan') || safeCmd.includes('inbox') || safeCmd.includes('amplop')) { 
-            let role = currentUser && currentUser.role ? String(currentUser.role).trim().toLowerCase() : '';
-            if(role === 'admin') switchView('inbox'); 
+        else if (cmd.includes('pesan') || cmd.includes('inbox') || cmd.includes('amplop')) { 
+            if(currentUser && currentUser.role === 'admin') switchView('inbox'); 
             else showToast("Akses ditolak.", true); 
         } 
-        else if (safeCmd.includes('keluar') || safeCmd.includes('logout')) { handleLogout(); } 
+        else if (cmd.includes('keluar') || cmd.includes('logout')) { handleLogout(); } 
         else { showToast("Perintah tidak dimengerti.", true); }
     }
 
@@ -884,16 +882,11 @@
 
     function showIdCard() { 
         if(!currentUser) return; 
-        document.getElementById('idcard-name').innerText = currentUser.name ? currentUser.name : '-'; 
-        document.getElementById('idcard-username').innerText = "@" + (currentUser.username ? currentUser.username : '-'); 
-        
-        let role = currentUser.role ? String(currentUser.role).trim().toLowerCase() : '';
-        document.getElementById('idcard-role').innerText = role === 'admin' ? 'ADMINISTRATOR' : 'PETUGAS LAPANGAN'; 
-        
-        let avatar = currentUser.avatar ? String(currentUser.avatar) : 'Felix';
-        let srcUrl = avatar.length > 20 ? avatar : 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + avatar; 
+        document.getElementById('idcard-name').innerText = currentUser.name; 
+        document.getElementById('idcard-username').innerText = "@" + currentUser.username; 
+        document.getElementById('idcard-role').innerText = currentUser.role === 'admin' ? 'ADMINISTRATOR' : 'PETUGAS LAPANGAN'; 
+        let srcUrl = currentUser.avatar && currentUser.avatar.length > 20 ? currentUser.avatar : `https://api.dicebear.com/7.x/avataaars/svg?seed=${currentUser.avatar || 'Felix'}`; 
         document.getElementById('idcard-avatar').src = srcUrl; 
-        
         document.getElementById('idcard-modal').classList.remove('hidden'); 
         document.getElementById('idcard-modal').classList.add('flex'); 
     }
@@ -968,9 +961,7 @@
         if(layananChartObj) renderChart(); 
     }
     function executeSettings() { 
-        let sStr = localStorage.getItem('simpro_settings'); 
-        let s = sStr ? JSON.parse(sStr) : {"darkMode":false,"batterySaver":false};
-        
+        let s = JSON.parse(localStorage.getItem('simpro_settings') || '{"darkMode":false,"batterySaver":false}'); 
         if (s.darkMode) {
             document.body.classList.add('dark-mode'); 
         } else {
@@ -1063,10 +1054,10 @@
         let db = localStorage.getItem('simpro_db');
         if (db) { 
             let parsed = JSON.parse(db); 
-            reports = parsed.reports ? parsed.reports : []; 
-            usersList = parsed.usersList ? parsed.usersList : []; 
-            inboxList = parsed.inboxList ? parsed.inboxList : []; 
-            bannerImages = parsed.bannerImages ? parsed.bannerImages : []; 
+            reports = parsed.reports || []; 
+            usersList = parsed.usersList || []; 
+            inboxList = parsed.inboxList || []; 
+            bannerImages = parsed.bannerImages || []; 
         } else { 
             reports = [{ ID_Sistem: "SIMPRO-9999", Tanggal: "2026-10-18", Waktu: "09:00", Petugas: "Arnoldus R. Jeheman, S.Pt", Layanan: "IB", Peternak: "Bapak Budi", Kontak: "0812345", Kecamatan: "Amarasi", Lokasi: "Buraen", Spesies: "Sapi", ID_Hewan: "SP-01", ID_Eartag: "ID-99", Bangsa_Induk: "Sapi Bali", IB_Ke: "1", ID_Pejantan: "LIM-01", ID_Pembuatan: "B-01", Bangsa_Pejantan: "Sapi Limousin", GPS: "-10.23,123.45", syncStatus: 'synced' }]; 
             usersList = []; inboxList = []; bannerImages = []; 
@@ -1074,8 +1065,7 @@
 
         let targetAdminUsername = "Arnol28";
         let defaultAdmin = { name: "Arnoldus R. Jeheman, S.Pt", username: targetAdminUsername, password: "29Yerusalem", role: "admin", whatsapp: "08123456789", email: "tamariska.jeheman@gmail.com", avatar: "Felix" };
-        let adminIdx = usersList.findIndex(u => String(u.username).toLowerCase() === targetAdminUsername.toLowerCase());
-        
+        let adminIdx = usersList.findIndex(u => u.username.toLowerCase() === targetAdminUsername.toLowerCase());
         if (adminIdx > -1) { 
             usersList[adminIdx].role = 'admin'; 
             usersList[adminIdx].email = 'tamariska.jeheman@gmail.com'; 
@@ -1177,8 +1167,7 @@
         
         clearInterval(bannerInterval);
         
-        let role = currentUser && currentUser.role ? String(currentUser.role).trim().toLowerCase() : '';
-        if(role === 'admin' && bannerImages.length > 0) { 
+        if(currentUser && currentUser.role === 'admin' && bannerImages.length > 0) { 
             if(delBtn) delBtn.classList.remove('hidden'); 
         } else { 
             if(delBtn) delBtn.classList.add('hidden'); 
@@ -1213,11 +1202,11 @@
         }
     }
 
-    // --- SINKRONISASI ---
+    // --- SINKRONISASI OFFLINE ---
     function updateInboxBadge() { 
         const badge = document.getElementById('inbox-badge'); 
         if(!badge) return; 
-        let pending = inboxList.filter(x => String(x.status) === 'Belum Diproses').length; 
+        let pending = inboxList.filter(x => x.status === 'Belum Diproses').length; 
         if(pending > 0) { 
             badge.innerText = pending; 
             badge.classList.remove('hidden'); 
@@ -1231,7 +1220,7 @@
     function updateSyncBadge() { 
         const badge = document.getElementById('sync-badge'); 
         if(!badge) return; 
-        let pending = reports.filter(x => String(x.syncStatus) === 'pending').length; 
+        let pending = reports.filter(x => x.syncStatus === 'pending').length; 
         if(pending > 0) { 
             badge.innerText = pending; 
             badge.classList.remove('hidden'); 
@@ -1243,7 +1232,7 @@
     }
     
     function syncPendingData() { 
-        let pendingReps = reports.filter(r => String(r.syncStatus) === 'pending'); 
+        let pendingReps = reports.filter(r => r.syncStatus === 'pending'); 
         if(pendingReps.length === 0) return showToast("Semua data sudah tersinkronisasi."); 
         
         showToast("Mensinkronisasi data..."); 
@@ -1252,7 +1241,7 @@
         
         setTimeout(() => { 
             reports.forEach(r => { 
-                if(String(r.syncStatus) === 'pending') r.syncStatus = 'synced'; 
+                if(r.syncStatus === 'pending') r.syncStatus = 'synced'; 
             }); 
             saveOfflineDB(); 
             updateSyncBadge(); 
@@ -1284,7 +1273,7 @@
         if(session) { 
             currentUser = JSON.parse(session); 
             if(IS_OFFLINE) { 
-                let dbUser = usersList.find(u => String(u.username).toLowerCase() === String(currentUser.username).toLowerCase()); 
+                let dbUser = usersList.find(u => u.username.toLowerCase() === currentUser.username.toLowerCase()); 
                 if(dbUser) { 
                     currentUser = dbUser; 
                     sessionStorage.setItem('simpro_pro_session', JSON.stringify(currentUser)); 
@@ -1299,7 +1288,7 @@
         fetchCloudData();
     }
 
-    // --- LOGIN ONLINE & LOKAL (KEBAL ERROR) ---
+    // --- LOGIN ONLINE & LOKAL ---
     async function handleLogin(e) {
         e.preventDefault(); 
         const u = document.getElementById('login-username').value.trim(); 
@@ -1307,26 +1296,27 @@
         const btn = document.getElementById('btn-login'); 
         const originalText = btn.innerHTML;
 
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> MENGHUBUNGKAN...'; 
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> MEMERIKSA DATA...'; 
         btn.disabled = true;
 
+        // Jika Online, tarik data terbaru dari Google Sheets dulu (Bypass CORS dengan GET)
         if (!IS_OFFLINE) {
             try { 
                 let res = await fetch(`${GOOGLE_SHEETS_URL}?action=getAllData&t=${new Date().getTime()}`); 
                 let json = await res.json(); 
                 if(json && json.result === 'success') { 
-                    usersList = json.users ? json.users : []; 
+                    usersList = json.users || []; 
                     saveOfflineDB(); 
                 } 
             } catch(err) { 
-                console.log("Mode Offline / Gagal Sync Server."); 
+                console.log("Gagal sync user, menggunakan data lokal."); 
             }
         }
 
         setTimeout(() => {
-            let foundUser = usersList.find(user => String(user.username).toLowerCase() === u.toLowerCase());
+            let foundUser = usersList.find(user => user.username.toLowerCase() === u.toLowerCase());
             
-            if (!foundUser || String(foundUser.password) !== p) { 
+            if (!foundUser || foundUser.password !== p) { 
                 showToast('Username atau Kata Sandi salah!', true); 
                 btn.innerHTML = originalText; 
                 btn.disabled = false; 
@@ -1334,7 +1324,7 @@
             }
             
             currentUser = { ...foundUser }; 
-            if(!currentUser.avatar) { currentUser.avatar = 'Felix'; } 
+            if(!currentUser.avatar) currentUser.avatar = 'Felix'; 
             sessionStorage.setItem('simpro_pro_session', JSON.stringify(currentUser)); 
             
             startAppFlow(); 
@@ -1352,8 +1342,7 @@
             if (currentUser) { 
                 updateDashboard(); 
                 updateSyncBadge(); 
-                let role = currentUser.role ? String(currentUser.role).trim().toLowerCase() : '';
-                if(role === 'admin') { 
+                if(currentUser.role === 'admin') { 
                     renderUserManagement(); renderInbox(); updateInboxBadge(); 
                 } 
             } 
@@ -1365,17 +1354,16 @@
             let res = await fetch(`${GOOGLE_SHEETS_URL}?action=getAllData&t=${new Date().getTime()}`); 
             let json = await res.json(); 
             if(json && json.result === 'success') { 
-                reports = json.reports ? json.reports : []; 
-                usersList = json.users ? json.users : []; 
-                inboxList = json.inbox ? json.inbox : []; 
+                reports = json.reports || []; 
+                usersList = json.users || []; 
+                inboxList = json.inbox || []; 
                 if(json.banners) { 
                     bannerImages = json.banners.map(b => b.image_data).filter(Boolean); 
                 }
                 saveOfflineDB();
                 if (currentUser) { 
                     updateDashboard(); 
-                    let role = currentUser.role ? String(currentUser.role).trim().toLowerCase() : '';
-                    if(role === 'admin') { 
+                    if(currentUser.role === 'admin') { 
                         renderUserManagement(); renderInbox(); updateInboxBadge(); 
                     } 
                 } 
@@ -1389,25 +1377,22 @@
         const pCont = document.getElementById('pengingat-container'); 
         if(!c || !pCont) return;
         
-        let safeUser = String(currentUser.username); 
-        let safeName = String(currentUser.name);
-        let myReps = reports.filter(r => String(r.Username) === safeUser || String(r.Petugas) === safeName); 
+        let myReps = reports.filter(r => r.Username === currentUser.username || r.Petugas === currentUser.name); 
         let pending = [];
-        
-        let ibs = myReps.filter(r => String(r.Layanan) === 'IB'); 
-        let pkbs = myReps.filter(r => String(r.Layanan) === 'PKB' && String(r.Hasil_PKB) === 'Bunting');
+        let ibs = myReps.filter(r => r.Layanan === 'IB'); 
+        let pkbs = myReps.filter(r => r.Layanan === 'PKB' && r.Hasil_PKB === 'Bunting');
         
         ibs.forEach(ib => { 
-            let hasPkb = myReps.some(p => String(p.Layanan) === 'PKB' && String(p.ID_Hewan) === String(ib.ID_Hewan) && new Date(p.Tanggal) >= new Date(ib.Tanggal)); 
+            let hasPkb = myReps.some(p => p.Layanan === 'PKB' && p.ID_Hewan === ib.ID_Hewan && new Date(p.Tanggal) >= new Date(ib.Tanggal)); 
             if(!hasPkb) { 
-                pending.push({ tipe: 'PKB', idHewan: String(ib.ID_Hewan), peternak: String(ib.Peternak), tglOri: String(ib.Tanggal), msg: `Belum lapor PKB (IB Tgl ${ib.Tanggal})` }); 
+                pending.push({ tipe: 'PKB', idHewan: ib.ID_Hewan, peternak: ib.Peternak, tglOri: ib.Tanggal, msg: `Belum lapor PKB (IB Tgl ${ib.Tanggal})` }); 
             } 
         });
         
         pkbs.forEach(pkb => { 
-            let hasLahir = myReps.some(l => String(l.Layanan) === 'Kelahiran' && String(l.ID_Hewan) === String(pkb.ID_Hewan) && new Date(l.Tanggal) >= new Date(pkb.Tanggal)); 
+            let hasLahir = myReps.some(l => l.Layanan === 'Kelahiran' && l.ID_Hewan === pkb.ID_Hewan && new Date(l.Tanggal) >= new Date(pkb.Tanggal)); 
             if(!hasLahir) { 
-                pending.push({ tipe: 'Kelahiran', idHewan: String(pkb.ID_Hewan), peternak: String(pkb.Peternak), tglOri: String(pkb.Tanggal), msg: `Pantau Kelahiran (Bunting sejak ${pkb.Tanggal})` }); 
+                pending.push({ tipe: 'Kelahiran', idHewan: pkb.ID_Hewan, peternak: pkb.Peternak, tglOri: pkb.Tanggal, msg: `Pantau Kelahiran (Bunting sejak ${pkb.Tanggal})` }); 
             } 
         });
 
@@ -1445,9 +1430,9 @@
         const ctx = document.getElementById('layananChart'); 
         if(!ctx) return; 
         
-        const ib = reports.filter(r => String(r.Layanan) === 'IB').length; 
-        const pkb = reports.filter(r => String(r.Layanan) === 'PKB').length; 
-        const lahir = reports.filter(r => String(r.Layanan) === 'Kelahiran').length; 
+        const ib = reports.filter(r => r.Layanan === 'IB').length; 
+        const pkb = reports.filter(r => r.Layanan === 'PKB').length; 
+        const lahir = reports.filter(r => r.Layanan === 'Kelahiran').length; 
         
         if (layananChartObj) { 
             layananChartObj.destroy(); 
@@ -1483,23 +1468,21 @@
             if (layer instanceof L.Marker || layer instanceof L.CircleMarker) map.removeLayer(layer); 
         });
         reports.forEach(r => {
-            let safeGps = String(r.GPS ? r.GPS : '');
-            if(safeGps && safeGps.includes(',')) {
-                let coords = safeGps.split(','); 
+            if(r.GPS && r.GPS.includes(',')) {
+                let coords = r.GPS.split(','); 
                 if(coords.length === 2) { 
                     let lat = parseFloat(coords[0]), lng = parseFloat(coords[1]); 
                     if(!isNaN(lat) && !isNaN(lng)) { 
-                        let lay = String(r.Layanan ? r.Layanan : ''); 
-                        let color = lay === 'IB' ? '#0284c7' : (lay === 'PKB' ? '#10b981' : '#ec4899'); 
+                        let color = r.Layanan === 'IB' ? '#0284c7' : (r.Layanan === 'PKB' ? '#10b981' : '#ec4899'); 
                         let circle = L.circleMarker([lat, lng], { radius: 6, fillColor: color, color: '#fff', weight: 1, opacity: 1, fillOpacity: 0.8 }).addTo(map); 
-                        circle.bindPopup(`<b>${lay}</b><br>${String(r.Peternak ? r.Peternak : '')}<br>${String(r.Spesies ? r.Spesies : '')} (${String(r.ID_Hewan ? r.ID_Hewan : '')})<br><span style="font-size:10px">${String(r.Tanggal ? r.Tanggal : '')}</span>`); 
+                        circle.bindPopup(`<b>${r.Layanan}</b><br>${r.Peternak}<br>${r.Spesies} (${r.ID_Hewan})<br><span style="font-size:10px">${r.Tanggal}</span>`); 
                     } 
                 }
             }
         });
     }
 
-    // --- FORM LAPORAN (OPTIMISTIC UI) ---
+    // --- FORM LAPORAN ---
     function prepareHtmxData(evt) {
         evt.preventDefault(); 
         document.getElementById('htmx-id-sistem').value = 'SIMPRO-' + Date.now().toString().slice(-5); 
@@ -1515,44 +1498,52 @@
 
         const fd = new FormData(form);
         const newRep = {};
-        for(let [key, value] of fd.entries()) { 
-            newRep[key] = value; 
+        for(let [key, value] of fd.entries()) {
+            newRep[key] = value;
         }
 
-        newRep.syncStatus = 'synced'; // Optimistic Update
-        reports.unshift(newRep); 
-        saveOfflineDB(); 
-        
-        form.reset(); 
-        document.getElementById('input-tanggal').valueAsDate = new Date(); 
-        document.getElementById('preview-foto-laporan').classList.add('hidden'); 
-        document.getElementById('icon-foto-placeholder').classList.remove('hidden'); 
-        updateDashboard(); 
-        updateSyncBadge(); 
-        switchView('data'); 
-        btn.style.display = 'block'; 
-        ind.style.display = 'none';
-
-        if (!IS_OFFLINE) {
+        if (IS_OFFLINE) {
+            setTimeout(() => { 
+                newRep.syncStatus = 'pending'; 
+                reports.unshift(newRep); 
+                saveOfflineDB(); 
+                showToast('Laporan Disimpan (Offline)'); 
+                
+                form.reset(); 
+                document.getElementById('input-tanggal').valueAsDate = new Date(); 
+                document.getElementById('preview-foto-laporan').classList.add('hidden'); 
+                document.getElementById('icon-foto-placeholder').classList.remove('hidden'); 
+                
+                updateDashboard(); 
+                updateSyncBadge(); 
+                switchView('data'); 
+                
+                btn.style.display = 'block'; 
+                ind.style.display = 'none'; 
+            }, 1000);
+        } else {
             const payload = createPayload(newRep);
             fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, mode: 'no-cors' })
-            .then(() => { 
-                showToast('Laporan Sukses Diunggah!'); 
+            .then(() => {
+                showToast('Laporan Sukses Diunggah!');
+                form.reset(); 
+                document.getElementById('input-tanggal').valueAsDate = new Date(); 
+                document.getElementById('preview-foto-laporan').classList.add('hidden'); 
+                document.getElementById('icon-foto-placeholder').classList.remove('hidden');
+                
                 fetchCloudData(); 
-            })
-            .catch(err => { 
-                showToast('Disimpan lokal (Gagal ke Cloud)', true); 
+                switchView('data');
+            }).catch(err => {
+                showToast('Disimpan lokal (Gagal ke Cloud)', true);
                 newRep.syncStatus = 'pending'; 
+                reports.unshift(newRep); 
                 saveOfflineDB(); 
                 updateSyncBadge(); 
-                renderDataList(); 
+                switchView('data');
+            }).finally(() => {
+                btn.style.display = 'block'; 
+                ind.style.display = 'none';
             });
-        } else {
-            newRep.syncStatus = 'pending'; 
-            saveOfflineDB(); 
-            updateSyncBadge(); 
-            renderDataList(); 
-            showToast('Laporan Disimpan (Offline)');
         }
     }
 
@@ -1567,10 +1558,8 @@
             if(id === 'profile') loadProfileData();
             if(id === 'data') { fetchCloudData(); renderDataList(); }
             if(id === 'dashboard') { renderPengingat(); setTimeout(() => renderChart(), 100); renderBanners(); updateSyncBadge(); }
-            
-            let role = currentUser && currentUser.role ? String(currentUser.role).trim().toLowerCase() : '';
-            if(id === 'users' && role === 'admin') { renderUserManagement(); }
-            if(id === 'inbox' && role === 'admin') { renderInbox(); updateInboxBadge(); }
+            if(id === 'users' && currentUser && currentUser.role === 'admin') { renderUserManagement(); }
+            if(id === 'inbox' && currentUser && currentUser.role === 'admin') { renderInbox(); updateInboxBadge(); }
             
             document.querySelectorAll('.nav-btn').forEach(btn => { 
                 if(btn.dataset.target === 'view-'+id) { 
@@ -1588,12 +1577,12 @@
     // --- PROFIL & AVATAR ---
     function loadProfileData() { 
         if(!currentUser) return; 
-        document.getElementById('edit-name').value = currentUser.name ? currentUser.name : ''; 
-        document.getElementById('edit-username').value = currentUser.username ? currentUser.username : ''; 
-        document.getElementById('edit-email').value = currentUser.email ? currentUser.email : ''; 
-        document.getElementById('edit-wa').value = currentUser.whatsapp ? currentUser.whatsapp : ''; 
+        document.getElementById('edit-name').value = currentUser.name || ''; 
+        document.getElementById('edit-username').value = currentUser.username || ''; 
+        document.getElementById('edit-email').value = currentUser.email || ''; 
+        document.getElementById('edit-wa').value = currentUser.whatsapp || ''; 
         document.getElementById('edit-password').value = ''; 
-        updateAvatarDisplay(currentUser.avatar ? currentUser.avatar : 'Felix', 'edit-avatar-preview', 'edit-avatar-fallback'); 
+        updateAvatarDisplay(currentUser.avatar || 'Felix', 'edit-avatar-preview', 'edit-avatar-fallback'); 
         isEditingProfile = false; 
         toggleEditProfileUI(); 
     }
@@ -1636,38 +1625,46 @@
         const newEmail = document.getElementById('edit-email').value.trim(); 
         const newWA = document.getElementById('edit-wa').value.trim(); 
         const newPass = document.getElementById('edit-password').value.trim(); 
-        const newAvatar = currentUser._tempAvatar ? currentUser._tempAvatar : currentUser.avatar;
+        const newAvatar = currentUser._tempAvatar || currentUser.avatar;
         
-        currentUser.name = newName; 
-        currentUser.email = newEmail; 
-        currentUser.whatsapp = newWA; 
-        currentUser.avatar = newAvatar; 
-        if(newPass) currentUser.password = newPass; 
-        delete currentUser._tempAvatar; 
-        sessionStorage.setItem('simpro_pro_session', JSON.stringify(currentUser)); 
-        
-        let idx = usersList.findIndex(u => String(u.username).toLowerCase() === String(currentUser.username).toLowerCase()); 
-        if(idx > -1) { 
-            usersList[idx].name = newName; 
-            usersList[idx].email = newEmail; 
-            usersList[idx].whatsapp = newWA; 
-            usersList[idx].avatar = newAvatar; 
-            if(newPass) usersList[idx].password = newPass; 
-        } 
-        
-        saveOfflineDB(); 
-        document.getElementById('dash-name').innerText = currentUser.name; 
-        updateAvatarDisplay(currentUser.avatar, 'header-avatar', 'header-avatar-fallback'); 
-        isEditingProfile = false; 
-        toggleEditProfileUI(); 
-        loadProfileData(); 
-        btn.innerHTML = '<i class="fas fa-save mr-1"></i> SIMPAN PERBAIKAN'; 
-        btn.disabled = false;
-        showToast("Profil Diperbarui!");
+        if (IS_OFFLINE) { 
+            setTimeout(() => { 
+                showToast("Profil diperbarui!"); 
+                currentUser.name = newName; currentUser.email = newEmail; currentUser.whatsapp = newWA; currentUser.avatar = newAvatar; 
+                if(newPass) currentUser.password = newPass; 
+                delete currentUser._tempAvatar; 
+                sessionStorage.setItem('simpro_pro_session', JSON.stringify(currentUser)); 
+                
+                let idx = usersList.findIndex(u => u.username.toLowerCase() === currentUser.username.toLowerCase()); 
+                if(idx > -1) { 
+                    usersList[idx].name = newName; usersList[idx].email = newEmail; usersList[idx].whatsapp = newWA; usersList[idx].avatar = newAvatar; 
+                    if(newPass) usersList[idx].password = newPass; 
+                } 
+                saveOfflineDB(); 
+                document.getElementById('dash-name').innerText = currentUser.name; 
+                updateAvatarDisplay(currentUser.avatar, 'header-avatar', 'header-avatar-fallback'); 
+                isEditingProfile = false; toggleEditProfileUI(); loadProfileData(); 
+                btn.innerHTML = '<i class="fas fa-save mr-1"></i> SIMPAN PERBAIKAN'; btn.disabled = false; 
+            }, 800); 
+            return; 
+        }
 
-        if (!IS_OFFLINE) {
-            const payload = createPayload({ action: 'updateProfile', username: currentUser.username, name: newName, email: newEmail, whatsapp: newWA, password: newPass, avatar: newAvatar });
-            try { fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, mode: 'no-cors' }); } catch(err) { }
+        const payload = createPayload({ action: 'updateProfile', username: currentUser.username, name: newName, email: newEmail, whatsapp: newWA, password: newPass, avatar: newAvatar });
+        try { 
+            fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, mode: 'no-cors' }); 
+            showToast("Profil Tersimpan!"); 
+            currentUser.name = newName; currentUser.email = newEmail; currentUser.whatsapp = newWA; currentUser.avatar = newAvatar; 
+            if(newPass) currentUser.password = newPass; 
+            delete currentUser._tempAvatar; 
+            sessionStorage.setItem('simpro_pro_session', JSON.stringify(currentUser)); 
+            document.getElementById('dash-name').innerText = currentUser.name; 
+            updateAvatarDisplay(currentUser.avatar, 'header-avatar', 'header-avatar-fallback'); 
+            isEditingProfile = false; toggleEditProfileUI(); loadProfileData(); 
+            fetchCloudData(); 
+        } catch(err) { 
+            showToast("Gagal terhubung", true); 
+        } finally { 
+            btn.innerHTML = '<i class="fas fa-save mr-1"></i> SIMPAN PERBAIKAN'; btn.disabled = false; 
         }
     }
 
@@ -1675,16 +1672,9 @@
         const imgEl = document.getElementById(imgElemId); 
         const fallbackEl = document.getElementById(fallbackElemId); 
         if(!imgEl || !fallbackEl) return; 
-        
-        let safeAvatar = String(avatarData ? avatarData : ''); 
-        if(!safeAvatar) { 
-            imgEl.classList.add('hidden'); fallbackEl.classList.remove('hidden'); return; 
-        } 
-        
-        let srcUrl = safeAvatar.length > 20 ? safeAvatar : `https://api.dicebear.com/7.x/avataaars/svg?seed=${safeAvatar}`; 
-        imgEl.src = srcUrl; 
-        imgEl.classList.remove('hidden'); 
-        fallbackEl.classList.add('hidden'); 
+        if(!avatarData) { imgEl.classList.add('hidden'); fallbackEl.classList.remove('hidden'); return; } 
+        let srcUrl = avatarData.length > 20 ? avatarData : `https://api.dicebear.com/7.x/avataaars/svg?seed=${avatarData}`; 
+        imgEl.src = srcUrl; imgEl.classList.remove('hidden'); fallbackEl.classList.add('hidden'); 
     }
     
     function generateAvatarSelectors() { 
@@ -1785,7 +1775,172 @@
         }); 
     }
 
-    // --- MANAJEMEN ADMIN (SISTEM KEBAL CRASH) ---
+    // --- FILTER & PENCARIAN (DIJAMIN UTUH) ---
+    function setLayananFilter(type) { 
+        activeLayananFilter = type; 
+        document.querySelectorAll('.layanan-tab').forEach(el => el.className = "layanan-tab flex flex-col items-center justify-center py-4 rounded-xl border-2 border-transparent bg-white text-slate-500 shadow-md transition"); 
+        document.getElementById('tab-' + type).className = "layanan-tab flex flex-col items-center justify-center py-4 rounded-xl border-2 border-emerald-600 bg-emerald-700 text-white shadow-md transition"; 
+        renderDataList(); 
+    }
+    
+    function resetFilters() { 
+        document.getElementById('filter-tanggal').value = ''; 
+        document.getElementById('filter-bulan').value = 'Semua'; 
+        document.getElementById('filter-tahun').value = 'Semua'; 
+        document.getElementById('filter-kecamatan').value = 'Semua'; 
+        document.getElementById('filter-desa').innerHTML = '<option value="Semua">Semua Desa</option>';
+        document.getElementById('filter-search').value = ''; 
+        setLayananFilter('Semua'); 
+    }
+
+    function getFilteredReports() {
+        let fd = reports; 
+        const fTgl = document.getElementById('filter-tanggal').value;
+        const fBulan = document.getElementById('filter-bulan').value;
+        const fTahun = document.getElementById('filter-tahun').value;
+        const fKecamatan = document.getElementById('filter-kecamatan').value;
+        const fDesa = document.getElementById('filter-desa').value;
+        const fSearch = document.getElementById('filter-search').value.toLowerCase();
+        
+        return fd.filter(r => {
+            if(!r.Tanggal) return false; 
+            if(activeLayananFilter !== 'Semua' && r.Layanan !== activeLayananFilter) return false;
+            
+            const rDateObj = new Date(r.Tanggal);
+            const rBulan = String(rDateObj.getMonth() + 1).padStart(2, '0');
+            const rTahun = String(rDateObj.getFullYear()); 
+            let match = true;
+            
+            if(fTgl && r.Tanggal !== fTgl) match = false;
+            if(!fTgl) { 
+                if(fBulan !== 'Semua' && rBulan !== fBulan) match = false; 
+                if(fTahun !== 'Semua' && rTahun !== fTahun) match = false; 
+            }
+            if(fKecamatan !== 'Semua' && r.Kecamatan !== fKecamatan) match = false; 
+            if(fDesa !== 'Semua' && r.Lokasi !== fDesa) match = false; 
+            
+            if(fSearch) { 
+                let textToSearch = `${r.ID_Sistem}${r.Peternak} ${r.ID_Hewan}${r.ID_Eartag}`.toLowerCase(); 
+                if(!textToSearch.includes(fSearch)) match = false; 
+            }
+            return match;
+        });
+    }
+    
+    function updateDashboard() {
+        document.getElementById('stat-ib').innerText = reports.filter(r => r.Layanan === 'IB').length; 
+        document.getElementById('stat-pkb').innerText = reports.filter(r => r.Layanan === 'PKB').length; 
+        document.getElementById('stat-kelahiran').innerText = reports.filter(r => r.Layanan === 'Kelahiran').length; 
+        document.getElementById('stat-total').innerText = reports.length; 
+        renderDataList(); renderPengingat(); setTimeout(() => renderChart(), 100); renderBanners();
+    }
+    
+    function renderDataList() {
+        const c = document.getElementById('data-container'); 
+        let fd = getFilteredReports(); 
+        document.getElementById('filter-count-badge').innerText = fd.length;
+        
+        if(fd.length === 0) { 
+            c.innerHTML = `<div class="glass-card p-8 text-center text-slate-500 text-xs">Belum ada data laporan yang sesuai filter.</div>`; 
+            return; 
+        }
+        
+        let html = `<div class="table-scroll shadow-sm"><table class="w-full text-left border-collapse whitespace-nowrap text-xs excel-table"><thead class="sticky-header"><tr><th class="px-4 py-3 text-[9px]">No</th><th class="px-4 py-3 text-[9px]">Sync</th><th class="px-4 py-3 text-[9px]">Waktu/Tgl</th><th class="px-4 py-3 text-[9px]">Layanan</th><th class="px-4 py-3 text-[9px]">Data Peternak</th><th class="px-4 py-3 text-[9px]">Wilayah/Lokasi</th><th class="px-4 py-3 text-[9px]">Data Hewan & Spesies</th><th class="px-4 py-3 text-[9px]">Detail Penanganan Khusus</th><th class="px-4 py-3 text-[9px]">Petugas Pelapor</th></tr></thead><tbody>`;
+        
+        fd.forEach((r, idx) => {
+            let detailData = "-"; 
+            if (r.Layanan === 'IB') {
+                detailData = `IB Ke: ${r.IB_Ke} | B.Pejantan: ${r.Bangsa_Pejantan} (${r.ID_Pejantan})`; 
+            } else if (r.Layanan === 'PKB') {
+                detailData = `Hasil PKB: ${r.Hasil_PKB} \vert{} Usia Kebuntingan:${r.Usia_Kebuntingan}`; 
+            } else if (r.Layanan === 'Kelahiran') {
+                detailData = `Status Lahir: ${r.Status_Lahir} \vert{} Nama Pedet:${r.Nama_Pedet}`;
+            }
+            
+            let syncIcon = r.syncStatus === 'pending' ? '<i class="fas fa-clock text-amber-500"></i>' : '<i class="fas fa-check-circle text-emerald-500"></i>';
+            
+            html += `<tr onclick="openDetailModal('${r.ID_Sistem}')" class="hover:bg-slate-50 transition cursor-pointer">
+                <td class="px-4 py-3">${idx+1}</td>
+                <td class="px-4 py-3 text-center">${syncIcon}</td>
+                <td class="px-4 py-3 font-mono">${r.Tanggal} <br><span class="text-[9px] text-slate-400">${r.Waktu}</span></td>
+                <td class="px-4 py-3 font-black text-sky-600">${r.Layanan}</td>
+                <td class="px-4 py-3 font-bold">${r.Peternak} <br><span class="text-[9px] font-normal text-slate-500"><i class="fas fa-phone mr-1"></i>${r.Kontak}</span></td>
+                <td class="px-4 py-3">${r.Kecamatan} <br><span class="text-[9px] text-slate-500">${r.Lokasi}</span></td>
+                <td class="px-4 py-3 font-mono text-indigo-700">${r.ID_Hewan} <br><span class="text-[9px] font-bold text-slate-500">${r.Spesies} -${r.Bangsa_Induk}</span></td>
+                <td class="px-4 py-3 text-emerald-700 font-semibold">${detailData}</td>
+                <td class="px-4 py-3 text-slate-700">${r.Petugas}</td>
+            </tr>`;
+        }); 
+        html += `</tbody></table></div>`; 
+        c.innerHTML = html;
+    }
+    
+    function openDetailModal(idSistem) {
+        const r = reports.find(x => x.ID_Sistem === idSistem); 
+        if(!r) return; 
+        
+        document.getElementById('modal-title').innerText = `Detail ${r.Layanan}`; 
+        document.getElementById('modal-subtitle').innerText = `Oleh: ${r.Petugas} • ${r.Tanggal}${r.Waktu}`;
+        
+        let fotoSection = r.Foto_Dokumentasi && r.Foto_Dokumentasi.length > 50 ? `<div class="mt-4 text-center"><p class="text-[9px] text-amber-600 font-bold uppercase mb-2">Foto Dokumentasi</p><img src="${r.Foto_Dokumentasi}" class="w-full h-48 object-cover rounded-xl border shadow-sm"></div>` : ''; 
+        let detailKhusus = "";
+        
+        if (r.Layanan === 'IB') {
+            detailKhusus = `<div class="grid grid-cols-2 gap-2"><p><b>IB Ke:</b> ${r.IB_Ke}</p><p><b>Bangsa Pejantan:</b>${r.Bangsa_Pejantan}</p><p><b>ID Pejantan:</b> ${r.ID_Pejantan}</p><p><b>ID Pembuatan:</b>${r.ID_Pembuatan}</p></div>`; 
+        } else if (r.Layanan === 'PKB') {
+            detailKhusus = `<div class="grid grid-cols-2 gap-2"><p><b>Hasil Diagnosa PKB:</b> ${r.Hasil_PKB}</p><p><b>Usia Kebuntingan:</b>${r.Usia_Kebuntingan}</p><p><b>Tanggal IB Lalu:</b> ${r.Tgl_IB_Lalu}</p><p><b>Pelapor IB Lalu:</b>${r.Pelapor_IB_Lalu}</p></div>`; 
+        } else if (r.Layanan === 'Kelahiran') {
+            detailKhusus = `<div class="grid grid-cols-2 gap-2"><p><b>Nama Pedet/Anak:</b> ${r.Nama_Pedet}</p><p><b>Status Lahir:</b>${r.Status_Lahir}</p><p><b>Tanggal IB Lalu:</b> ${r.Tgl_IB_Lalu}</p><p><b>Pelapor IB Lalu:</b>${r.Pelapor_IB_Lalu}</p></div>`;
+        }
+        
+        let html = `<div class="overflow-hidden rounded-xl border bg-white/70 shadow-sm p-4 space-y-2 text-xs">
+            <p class="border-b pb-2 mb-2"><b>ID Laporan:</b> <span class="font-mono text-sky-700">${r.ID_Sistem}</span></p>
+            <div class="grid grid-cols-2 gap-2">
+                <p><b>Peternak:</b> ${r.Peternak}</p>
+                <p><b>Kontak:</b> ${r.Kontak}</p>
+                <p><b>Kecamatan:</b> ${r.Kecamatan || '-'}</p>
+                <p><b>Desa:</b> ${r.Lokasi}</p>
+                <p><b>Spesies Hewan:</b> ${r.Spesies}</p>
+                <p><b>Bangsa Induk:</b> ${r.Bangsa_Induk}</p>
+                <p><b>ID Hewan:</b> ${r.ID_Hewan}</p>
+                <p><b>No Eartag:</b> ${r.ID_Eartag}</p>
+            </div>
+            <p class="pt-2"><b>GPS Koordinat:</b> <a href="https://maps.google.com/?q=${r.GPS}" target="_blank" class="text-blue-600 font-semibold hover:underline"><i class="fas fa-map-marker-alt mr-1"></i> Buka di Maps (${r.GPS})</a></p>
+            <div class="mt-3 pt-3 border-t border-slate-200">
+                <p class="font-black text-sky-800 mb-3 text-sm">Rincian Penanganan Khusus (${r.Layanan})</p>${detailKhusus}
+            </div>
+        </div>${fotoSection}`;
+        
+        document.getElementById('modal-content').innerHTML = html; 
+        const mod = document.getElementById('detail-modal'); 
+        mod.classList.remove('hidden'); 
+        mod.classList.add('flex');
+    }
+    
+    function closeDetailModal() { 
+        const mod = document.getElementById('detail-modal'); 
+        mod.classList.add('hidden'); 
+        mod.classList.remove('flex'); 
+    }
+    
+    function exportToExcel() {
+        let fd = getFilteredReports(); 
+        if(fd.length === 0) return showToast("Tidak ada data laporan untuk diunduh!", true);
+        
+        let aoa = [["No", "ID Sistem", "Tanggal", "Waktu", "Petugas", "Layanan", "Peternak", "Kontak", "Kecamatan", "Desa/Lokasi", "Spesies", "ID Hewan", "Eartag", "Bangsa Induk", "IB Ke", "ID Pejantan", "Kode Pembuatan", "Bangsa Pejantan", "Hasil PKB", "Usia Bunting", "Nama Pedet", "Status Lahir", "Tgl IB Lalu", "Pelapor IB Lalu"]];
+        
+        fd.forEach((r, idx) => { 
+            aoa.push([ idx+1, r.ID_Sistem, r.Tanggal, r.Waktu, r.Petugas, r.Layanan, r.Peternak, r.Kontak, r.Kecamatan, r.Lokasi, r.Spesies, r.ID_Hewan, r.ID_Eartag, r.Bangsa_Induk, r.IB_Ke||'-', r.ID_Pejantan||'-', r.ID_Pembuatan||'-', r.Bangsa_Pejantan||'-', r.Hasil_PKB||'-', r.Usia_Kebuntingan||'-', r.Nama_Pedet||'-', r.Status_Lahir||'-', r.Tgl_IB_Lalu||'-', r.Pelapor_IB_Lalu||'-' ]); 
+        });
+        
+        const wb = XLSX.utils.book_new(); 
+        const ws = XLSX.utils.aoa_to_sheet(aoa); 
+        XLSX.utils.book_append_sheet(wb, ws, "Laporan_SIMPRO"); 
+        XLSX.writeFile(wb, `Data_Laporan_SIMPRO_${activeLayananFilter}_${new Date().toISOString().slice(0,10)}.xlsx`); 
+        showToast("Laporan Excel berhasil diunduh!");
+    }
+
+    // --- MANAJEMEN ADMIN (USER & INBOX) ---
     function renderUserManagement() {
         const c = document.getElementById('users-container'); 
         if(!c) return; 
@@ -1798,27 +1953,23 @@
         
         usersList.forEach(u => {
             let adminBtns = '';
-            let roleAdmin = currentUser && currentUser.role ? String(currentUser.role).trim().toLowerCase() : '';
-            if (roleAdmin === 'admin') { 
-                let btnHapus = String(u.username) !== String(currentUser.username) ? `<button type="button" onclick="adminDeleteUser('${u.username}')" class="bg-rose-50 text-rose-600 hover:bg-rose-100 hover:text-rose-700 px-3 py-1.5 rounded-lg text-[9px] font-black transition shadow-sm active:scale-95"><i class="fas fa-trash mr-1"></i> HAPUS</button>` : ``; 
+            if (currentUser && currentUser.role === 'admin') { 
+                let btnHapus = u.username !== currentUser.username ? `<button type="button" onclick="adminDeleteUser('${u.username}')" class="bg-rose-50 text-rose-600 hover:bg-rose-100 hover:text-rose-700 px-3 py-1.5 rounded-lg text-[9px] font-black transition shadow-sm active:scale-95"><i class="fas fa-trash mr-1"></i> HAPUS</button>` : ``; 
                 adminBtns = `<div class="mt-3 pt-2 border-t border-slate-100 flex justify-end gap-2"><button type="button" onclick="adminEditUser('${u.username}')" class="bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-700 px-3 py-1.5 rounded-lg text-[9px] font-black transition shadow-sm active:scale-95"><i class="fas fa-pencil-alt mr-1"></i> EDIT</button>${btnHapus}</div>`; 
             }
-            let safeWa = u.whatsapp ? String(u.whatsapp) : '-'; 
-            let safeEmail = u.email ? String(u.email) : '-';
-            let uRole = u.role ? String(u.role).toLowerCase() : 'petugas';
-            c.innerHTML += `<div class="glass-card p-4 shadow-sm mb-3"><div class="flex justify-between items-start"><div><p class="text-sm font-black text-slate-800">${u.name}</p><p class="text-[10px] text-sky-600 font-mono mt-0.5">@${u.username}</p><p class="text-[10px] text-slate-500 mt-1"><i class="fab fa-whatsapp text-emerald-500 mr-1"></i>${safeWa} <br> <i class="far fa-envelope text-blue-400 mr-1 mt-1"></i>${safeEmail}</p></div><span class="text-[9px] ${uRole === 'admin' ? 'bg-indigo-100 text-indigo-700' : 'bg-emerald-100 text-emerald-700'} px-2.5 py-1 rounded-full font-black uppercase shadow-sm">${u.role}</span></div>${adminBtns}</div>`;
+            c.innerHTML += `<div class="glass-card p-4 shadow-sm mb-3"><div class="flex justify-between items-start"><div><p class="text-sm font-black text-slate-800">${u.name}</p><p class="text-[10px] text-sky-600 font-mono mt-0.5">@${u.username}</p><p class="text-[10px] text-slate-500 mt-1"><i class="fab fa-whatsapp text-emerald-500 mr-1"></i>${u.whatsapp || '-'} <br> <i class="far fa-envelope text-blue-400 mr-1 mt-1"></i>${u.email || '-'}</p></div><span class="text-[9px] ${u.role === 'admin' ? 'bg-indigo-100 text-indigo-700' : 'bg-emerald-100 text-emerald-700'} px-2.5 py-1 rounded-full font-black uppercase shadow-sm">${u.role}</span></div>${adminBtns}</div>`;
         });
     }
 
     function adminEditUser(targetUsername) { 
-        let u = usersList.find(x => String(x.username) === String(targetUsername)); 
+        let u = usersList.find(x => x.username === targetUsername); 
         if(!u) return; 
         document.getElementById('admin-edit-old-username').value = u.username; 
         document.getElementById('admin-edit-name').value = u.name; 
         document.getElementById('admin-edit-username').value = u.username; 
-        document.getElementById('admin-edit-role').value = u.role ? String(u.role).toLowerCase() : 'petugas'; 
-        document.getElementById('admin-edit-email').value = u.email ? u.email : ''; 
-        document.getElementById('admin-edit-wa').value = u.whatsapp ? u.whatsapp : ''; 
+        document.getElementById('admin-edit-role').value = u.role || 'petugas'; 
+        document.getElementById('admin-edit-email').value = u.email || ''; 
+        document.getElementById('admin-edit-wa').value = u.whatsapp || ''; 
         document.getElementById('admin-edit-password').value = ''; 
         document.getElementById('admin-edit-modal').classList.remove('hidden'); 
         document.getElementById('admin-edit-modal').classList.add('flex'); 
@@ -1838,36 +1989,48 @@
         const newWa = document.getElementById('admin-edit-wa').value; 
         const newPass = document.getElementById('admin-edit-password').value;
         
-        let idx = usersList.findIndex(x => String(x.username) === String(oldUser)); 
-        if(idx > -1) { 
-            usersList[idx].name = newName; 
-            usersList[idx].role = newRole; 
-            usersList[idx].email = newEmail; 
-            usersList[idx].whatsapp = newWa; 
-            if(newPass) usersList[idx].password = newPass; 
-            saveOfflineDB(); 
-            showToast(`Data Petugas Diperbarui!`); 
-            renderUserManagement(); 
-        } 
-        closeAdminEditModal();
-        
-        if (!IS_OFFLINE) { 
-            const payload = createPayload({ action: 'adminEditUser', oldUsername: oldUser, name: newName, role: newRole, email: newEmail, whatsapp: newWa, password: newPass });
-            try { fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, mode: 'no-cors' }); } catch(err) { }
+        if (IS_OFFLINE) { 
+            let idx = usersList.findIndex(x => x.username === oldUser); 
+            if(idx > -1) { 
+                usersList[idx].name = newName; 
+                usersList[idx].role = newRole; 
+                usersList[idx].email = newEmail; 
+                usersList[idx].whatsapp = newWa; 
+                if(newPass) usersList[idx].password = newPass; 
+                saveOfflineDB(); 
+                showToast(`Data diperbarui!`); 
+                renderUserManagement(); 
+            } 
+            closeAdminEditModal(); 
+            return; 
+        }
+        const payload = createPayload({ action: 'adminEditUser', oldUsername: oldUser, name: newName, role: newRole, email: newEmail, whatsapp: newWa, password: newPass });
+        try { 
+            await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, mode: 'no-cors' }); 
+            showToast(`User diperbarui. Minta refresh.`); 
+            fetchCloudData(); 
+            closeAdminEditModal(); 
+        } catch(err) { 
+            showToast('Gagal terhubung', true); 
         }
     }
 
     async function adminDeleteUser(targetUsername) { 
-        if(!confirm(`PERINGATAN: Yakin menghapus permanen akun petugas @${targetUsername}?`)) return; 
-        
-        usersList = usersList.filter(u => String(u.username) !== String(targetUsername)); 
-        saveOfflineDB(); 
-        showToast(`Akun Petugas Dihapus.`); 
-        renderUserManagement(); 
-        
-        if(!IS_OFFLINE) { 
-            const payload = createPayload({ action: 'deleteUser', targetUsername: targetUsername });
-            try { fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, mode: 'no-cors' }); } catch(err) { }
+        if(!confirm(`PERINGATAN: Yakin ingin menghapus permanen akun petugas @${targetUsername}?`)) return; 
+        if(IS_OFFLINE) { 
+            usersList = usersList.filter(u => u.username !== targetUsername); 
+            saveOfflineDB(); 
+            showToast(`Akun dihapus.`); 
+            renderUserManagement(); 
+            return; 
+        } 
+        const payload = createPayload({ action: 'deleteUser', targetUsername: targetUsername });
+        try { 
+            await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, mode: 'no-cors' }); 
+            showToast(`Akun dihapus.`); 
+            fetchCloudData(); 
+        } catch(err) { 
+            showToast('Gagal terhubung', true); 
         }
     }
 
@@ -1877,7 +2040,7 @@
         if(!c) return; 
         c.innerHTML = '';
         
-        let pendingList = inboxList.filter(x => String(x.status) === 'Belum Diproses'); 
+        let pendingList = inboxList.filter(x => x.status === 'Belum Diproses'); 
         if(pendingList.length > 0) { 
             badge.innerText = pendingList.length; 
             badge.classList.remove('hidden'); 
@@ -1893,33 +2056,28 @@
         }
         
         inboxList.forEach(m => {
-            let mStatus = String(m.status); 
-            let mId = m.id ? String(m.id) : ''; 
-            let mWa = m.wa ? String(m.wa) : ''; 
-            let mEmail = m.email ? String(m.email) : ''; 
-            let mUser = m.username ? String(m.username) : ''; 
-            let mDate = m.date ? String(m.date) : ''; 
-            let mMsg = m.message ? String(m.message) : '';
-            
-            let actionBtn = mStatus === 'Belum Diproses' ? `<div class="grid grid-cols-2 gap-2 mt-3"><button type="button" onclick="adminResetPasswordAndReply('${mUser}', '${mWa}', '${mEmail}')" class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-2 rounded-lg text-[9px] font-black shadow-sm transition"><i class="fas fa-key mr-1"></i> RESET SANDI</button><button type="button" onclick="adminResolveMessage('${mId}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2 py-2 rounded-lg text-[9px] font-black shadow-sm transition"><i class="fas fa-check-double mr-1"></i> SELESAI</button></div>` : `<span class="bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-lg text-[9px] font-black w-full text-center block mt-2 shadow-sm"><i class="fas fa-check-circle mr-1"></i> DISELESAIKAN</span>`;
-            
-            let waLink = mWa.replace(/^0/, '62');
-            c.innerHTML += `<div class="glass-card p-4 shadow-sm mb-3 border-l-4 ${mStatus === 'Belum Diproses' ? 'border-rose-500' : 'border-emerald-500'}"><p class="text-[10px] text-slate-400 mb-1">ID Keluhan: ${mId} | ${mDate}</p><p class="text-sm font-black text-slate-800">@${mUser}</p><div class="my-2 bg-rose-50 p-3 rounded-xl border border-rose-100"><p class="text-xs text-slate-700 font-semibold italic">"${mMsg}"</p></div><div class="grid grid-cols-2 gap-2 mt-2"><a href="https://wa.me/${waLink}" target="_blank" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-600 text-center py-1.5 rounded text-[10px] font-bold transition"><i class="fab fa-whatsapp mr-1"></i> WA: ${mWa}</a><a href="mailto:${mEmail}" class="bg-blue-50 hover:bg-blue-100 text-blue-600 text-center py-1.5 rounded text-[10px] font-bold transition"><i class="far fa-envelope mr-1"></i> Email</a></div>${actionBtn}</div>`;
+            let actionBtn = m.status === 'Belum Diproses' ? `<div class="grid grid-cols-2 gap-2 mt-3"><button type="button" onclick="adminResetPasswordAndReply('${m.username}', '${m.wa}', '${m.email}')" class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-2 rounded-lg text-[9px] font-black shadow-sm transition"><i class="fas fa-key mr-1"></i> RESET SANDI</button><button type="button" onclick="adminResolveMessage('${m.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2 py-2 rounded-lg text-[9px] font-black shadow-sm transition"><i class="fas fa-check-double mr-1"></i> SELESAI</button></div>` : `<span class="bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-lg text-[9px] font-black w-full text-center block mt-2 shadow-sm"><i class="fas fa-check-circle mr-1"></i> DISELESAIKAN</span>`;
+            c.innerHTML += `<div class="glass-card p-4 shadow-sm mb-3 border-l-4 ${m.status === 'Belum Diproses' ? 'border-rose-500' : 'border-emerald-500'}"><p class="text-[10px] text-slate-400 mb-1">ID Keluhan: ${m.id} | ${m.date}</p><p class="text-sm font-black text-slate-800">@${m.username}</p><div class="my-2 bg-rose-50 p-3 rounded-xl border border-rose-100"><p class="text-xs text-slate-700 font-semibold italic">"${m.message}"</p></div><div class="grid grid-cols-2 gap-2 mt-2"><a href="https://wa.me/${m.wa.replace(/^0/, '62')}" target="_blank" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-600 text-center py-1.5 rounded text-[10px] font-bold transition"><i class="fab fa-whatsapp mr-1"></i> WA: ${m.wa}</a><a href="mailto:${m.email}" class="bg-blue-50 hover:bg-blue-100 text-blue-600 text-center py-1.5 rounded text-[10px] font-bold transition"><i class="far fa-envelope mr-1"></i> Email</a></div>${actionBtn}</div>`;
         });
     }
 
     async function adminResolveMessage(idMsg) { 
-        let msg = inboxList.find(x => String(x.id) === String(idMsg)); 
-        if(msg) msg.status = 'Telah Diselesaikan'; 
-        
-        saveOfflineDB(); 
-        showToast(`Pesan Diselesaikan.`); 
-        renderInbox(); 
-        updateInboxBadge(); 
-        
-        if(!IS_OFFLINE) { 
-            const payload = createPayload({ action: 'resolveMessage', idMsg: idMsg });
-            try { fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, mode: 'no-cors' }); } catch(err) { } 
+        if(IS_OFFLINE) { 
+            let msg = inboxList.find(x => x.id === idMsg); 
+            if(msg) msg.status = 'Telah Diselesaikan'; 
+            saveOfflineDB(); 
+            showToast(`Pesan diselesaikan.`); 
+            renderInbox(); 
+            updateInboxBadge(); 
+            return; 
+        } 
+        const payload = createPayload({ action: 'resolveMessage', idMsg: idMsg });
+        try { 
+            await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, mode: 'no-cors' }); 
+            showToast(`Diselesaikan.`); 
+            fetchCloudData(); 
+        } catch(err) { 
+            showToast('Gagal terhubung', true); 
         }
     }
 
@@ -1927,25 +2085,26 @@
         const newPass = prompt(`Masukkan Kata Sandi Baru untuk pengguna @${targetUsername}:`); 
         if(!newPass) return; 
         
-        let u = usersList.find(x => String(x.username) === String(targetUsername)); 
-        if(u) u.password = newPass; 
+        if(IS_OFFLINE) { 
+            let u = usersList.find(x => x.username === targetUsername); 
+            if(u) u.password = newPass; 
+            saveOfflineDB(); 
+            showToast(`Sandi @${targetUsername} diubah!`); 
+            return; 
+        } 
         
-        saveOfflineDB(); 
-        showToast(`Sandi Diperbarui!`); 
-        
-        let text = `Halo, Admin SIMPRO.\nSandi akun Anda (@${targetUsername}) telah direset.\n*Sandi Baru:* ${newPass}`; 
-        let sWa = waNumber ? String(waNumber) : ''; 
-        let sEmail = emailTarget ? String(emailTarget) : '';
-        
-        if(sWa && sWa.length > 5) { 
-            window.open(`https://wa.me/${sWa.replace(/^0/,'62')}?text=${encodeURIComponent(text)}`, '_blank'); 
-        } else if(sEmail && sEmail.includes('@')) { 
-            window.open(`mailto:${sEmail}?subject=Sandi%20Baru&body=${encodeURIComponent(text)}`, '_blank'); 
-        }
-        
-        if(!IS_OFFLINE) { 
-            const payload = createPayload({ action: 'adminResetPassword', targetUsername: targetUsername, newPassword: newPass });
-            try { fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, mode: 'no-cors' }); } catch(e) { } 
+        const payload = createPayload({ action: 'adminResetPassword', targetUsername: targetUsername, newPassword: newPass });
+        try {
+            fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, mode: 'no-cors' }); 
+            showToast(`Sandi dikirim ke server!`); 
+            let text = `Halo, Admin SIMPRO.\nSandi akun Anda (@${targetUsername}) telah direset.\n*Sandi Baru:* ${newPass}`; 
+            if(waNumber && waNumber.length > 5) { 
+                window.open(`https://wa.me/${waNumber.replace(/^0/,'62')}?text=${encodeURIComponent(text)}`, '_blank'); 
+            } else if(emailTarget && emailTarget.includes('@')) { 
+                window.open(`mailto:${emailTarget}?subject=Sandi%20Baru&body=${encodeURIComponent(text)}`, '_blank'); 
+            } 
+        } catch(e) { 
+            showToast("Gagal terhubung", true); 
         }
     }
 
@@ -1955,16 +2114,13 @@
         btn.innerText = "MENYIMPAN DATA..."; 
         btn.disabled = true;
         
-        let exists = usersList.find(x => String(x.username).toLowerCase() === document.getElementById('reg-username').value.trim().toLowerCase());
-        if(exists) { 
-            showToast('Username sudah dipakai!', true); 
-            btn.innerText = "DAFTARKAN AKUN"; 
-            btn.disabled = false; 
-            return; 
-        }
-        
         if (IS_OFFLINE) {
             setTimeout(() => { 
+                let exists = usersList.find(x => x.username.toLowerCase() === document.getElementById('reg-username').value.trim().toLowerCase());
+                if(exists) { 
+                    showToast('Username sudah dipakai!', true); 
+                    btn.innerText = "DAFTARKAN AKUN"; btn.disabled = false; return; 
+                }
                 usersList.push({ name: document.getElementById('reg-name').value, username: document.getElementById('reg-username').value.trim(), role: 'petugas', whatsapp: document.getElementById('reg-whatsapp').value, email: document.getElementById('reg-email').value, avatar: 'Felix', password: document.getElementById('reg-password').value });
                 saveOfflineDB(); 
                 showToast('Registrasi Berhasil! Silakan Login.'); 
@@ -1993,28 +2149,25 @@
     async function submitForgotPassword() {
         const identifier = document.getElementById('forgot-identifier').value.trim(); 
         const message = document.getElementById('forgot-message').value.trim();
-        
         if(!identifier || !message) return showToast("Mohon lengkapi form!", true); 
         
         const btn = document.getElementById('btn-submit-forgot'); 
         btn.innerText = "MENGIRIM..."; 
         btn.disabled = true;
         
-        let foundUser = usersList.find(u => String(u.username).toLowerCase() === identifier.toLowerCase() || String(u.email).toLowerCase() === identifier.toLowerCase()); 
-        let finalUsername = foundUser ? foundUser.username : identifier; 
-        let userWa = foundUser ? (foundUser.whatsapp ? foundUser.whatsapp : "-") : "-"; 
-        let userEmail = foundUser ? (foundUser.email ? foundUser.email : identifier) : identifier;
-        
         if(IS_OFFLINE) {
             setTimeout(() => { 
+                let foundUser = usersList.find(u => u.username.toLowerCase() === identifier.toLowerCase() || u.email.toLowerCase() === identifier.toLowerCase()); 
+                let finalUsername = foundUser ? foundUser.username : identifier; 
+                let userWa = foundUser ? (foundUser.whatsapp || "-") : "-"; 
+                let userEmail = foundUser ? (foundUser.email || identifier) : identifier;
                 inboxList.unshift({ id: "MSG-" + Date.now().toString().slice(-4), date: new Date().toISOString().split('T')[0], username: finalUsername, message: message, wa: userWa, email: userEmail, status: "Belum Diproses" });
                 saveOfflineDB(); 
                 showToast("Pesan dikirim ke Admin."); 
                 closeForgotPassword(); 
                 btn.innerText = "KIRIM PESAN KE ADMIN"; 
                 btn.disabled = false; 
-                let roleAdmin = currentUser && currentUser.role ? String(currentUser.role).trim().toLowerCase() : '';
-                if(roleAdmin === 'admin') { updateInboxBadge(); renderInbox(); }
+                if(currentUser && currentUser.role === 'admin') { updateInboxBadge(); renderInbox(); }
             }, 800); 
             return;
         }
@@ -2022,7 +2175,7 @@
         const payload = createPayload({ action: 'forgotPasswordRequest', identifier: identifier, message: message });
         try { 
             fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: payload, mode: 'no-cors' }); 
-            showToast("Pesan dikirim ke Admin."); 
+            showToast("Pesan dikirim."); 
             closeForgotPassword(); 
         } catch(e) { 
             showToast("Gagal terhubung.", true); 
@@ -2051,12 +2204,10 @@
 
     function startAppFlow() {
         document.getElementById('dash-name').innerText = currentUser.name; 
-        document.getElementById('dash-role').innerText = currentUser.role ? String(currentUser.role).toUpperCase() : 'PETUGAS'; 
-        updateAvatarDisplay(currentUser.avatar ? currentUser.avatar : 'Felix', 'header-avatar', 'header-avatar-fallback');
+        document.getElementById('dash-role').innerText = currentUser.role.toUpperCase(); 
+        updateAvatarDisplay(currentUser.avatar || 'Felix', 'header-avatar', 'header-avatar-fallback');
         
-        let role = currentUser && currentUser.role ? String(currentUser.role).trim().toLowerCase() : '';
-        
-        if(role === 'admin') { 
+        if(currentUser.role === 'admin') { 
             document.getElementById('admin-tools').classList.remove('hidden'); 
             const inboxBtn = document.getElementById('btn-inbox-header'); 
             inboxBtn.classList.remove('hidden'); 
@@ -2083,6 +2234,7 @@
         updateSyncBadge(); 
         renderBanners();
     }
+
     </script>
 </body>
 </html>
